@@ -1,99 +1,75 @@
-# 🚀 Frontend Repository
+# React + TypeScript + Vite
 
-Bienvenido al repositorio del frontend del proyecto. Este proyecto está construido con herramientas modernas enfocadas en rendimiento, escalabilidad y buenas prácticas de desarrollo.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
----
+Currently, two official plugins are available:
 
-## 🧩 Requisitos
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-Antes de comenzar, asegúrate de tener instalado:
+## React Compiler
 
-* **Node.js** → `v24.13.0`
+The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
 
-Puedes verificar tu versión con:
+Note: This will impact Vite dev & build performances.
 
-```bash
-node -v
+## Expanding the ESLint configuration
+
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
+
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
 
----
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-## ⚙️ Instalación y ejecución
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-Sigue estos pasos para correr el proyecto en entorno local:
-
-```bash
-# 1. Clonar el repositorio
-git clone <repo-url >
-
-# 2. Entrar a la carpeta del proyecto
-cd <nombre-del-proyecto>
-
-# 3. Instalar dependencias
-npm install
-
-# 4. Ejecutar en modo desarrollo
-npm run dev
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
-
----
-
-## 🌐 Acceso local
-
-Una vez levantado el proyecto, estará disponible en:
-
-```bash
-http://localhost:5173
-```
-
----
-
-## 🏗️ Estructura del proyecto
-
-El proyecto sigue una estructura modular pensada para escalabilidad y mantenimiento:
-
-```
-src/
-│
-├── assets/        # Imágenes, fuentes y recursos estáticos
-├── components/    # Componentes reutilizables (Button, Card, etc.)
-├── pages/         # Vistas principales (Home, Login, Dashboard)
-├── layouts/       # Layouts globales (MainLayout, AuthLayout)
-├── hooks/         # Custom hooks
-├── services/      # Consumo de APIs y lógica externa
-├── store/         # Estado global (Redux, Zustand, etc.)
-├── utils/         # Funciones auxiliares (helpers)
-├── routes/        # Configuración de rutas
-│
-├── App.tsx        # Componente raíz
-└── main.tsx       # Punto de entrada de la app
-```
-
----
-
-## 🛠️ Tecnologías utilizadas
-
-* ⚡ **Vite** — Bundler rápido para desarrollo moderno
-* ⚛️ **React** — Librería para construcción de interfaces
-* 🟦 **TypeScript**  — Tipado estático para mayor robustez
-
----
-
-## 📌 Notas
-
-* Este proyecto está diseñado para seguir buenas prácticas de desarrollo frontend.
-* Se recomienda mantener la estructura propuesta para facilitar escalabilidad y trabajo en equipo.
-
----
-
-## 🚧 Próximas mejoras (opcional)
-
-* Configuración de linting (ESLint + Prettier)
-* Manejo de variables de entorno
-* Implementación de autenticación
-* Rutas protegidas
-
----
-
-> Proyecto en desarrollo 🚀
-
