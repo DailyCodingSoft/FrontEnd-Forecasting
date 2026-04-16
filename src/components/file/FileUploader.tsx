@@ -1,6 +1,6 @@
 // components/file/FileUploader.tsx
 import { useState } from "react";
-import * as XLSX from "xlsx";
+import parseFile from "@/utils/files/importer_datos"
 
 type FileItem = {
   file: File;
@@ -12,9 +12,10 @@ const FileUploader = () => {
   const [files, setFiles] = useState<FileItem[]>([]);
 
   const handleFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
+    const files = e.target?.files;
+    if (!files || files.length === 0) return;
 
-    const newFiles: FileItem[] = Array.from(e.target.files).map((file) => ({
+    const newFiles: FileItem[] = Array.from(files).map((file) => ({
       file,
       progress: 0,
       status: "uploading",
@@ -49,25 +50,15 @@ const FileUploader = () => {
     }, 300);
   };
 
-  // 📖 Leer archivo
-  const readFile = (file: File) => {
-    const reader = new FileReader();
+  const readFile = async (file: File) => {
+  try {
+    const data = await parseFile(file);
 
-    reader.onload = (e) => {
-      const data = e.target?.result;
-
-      if (!data) return;
-
-      const workbook = XLSX.read(data, { type: "binary" });
-      const sheet = workbook.Sheets[workbook.SheetNames[0]];
-
-      const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-      console.log(jsonData.slice(0, 2));
-      console.log("Primeras 2 líneas:", jsonData.slice(0, 2));
-    };
-
-    reader.readAsBinaryString(file);
-  };
+    console.log("Primeras 2 líneas:", data.slice(0, 2));
+  } catch (error) {
+    console.error("Error leyendo archivo:", error);
+  }
+};
 
   return (
     <div className="flex flex-col md:flex-row gap-6 items-center">
@@ -84,7 +75,7 @@ const FileUploader = () => {
       {/* Lateral archivos */}
       <div className="flex flex-col gap-4">
         {files.map((item, i) => (
-          <div className="w-full md:w-[300px]">
+          <div key={i} className="w-full md:w-[300px]">
             
             {/* Nombre */}
             <p className="text-sm font-medium">{item.file.name}</p>
