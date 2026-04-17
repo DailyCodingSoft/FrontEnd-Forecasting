@@ -1,9 +1,9 @@
 export interface SaleRow {
-  producto: string;
-  identificador: string;
-  venta: number;
-  semana: number;
-  fecha: string;
+  productName: string;
+  identificator: string;
+  quantity: number;
+  week: number;
+  date: string;
 }
 
 export interface Column {
