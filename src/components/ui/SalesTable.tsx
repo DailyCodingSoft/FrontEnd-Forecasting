@@ -2,14 +2,14 @@ import { useState } from "react";
 import type { SaleRow, Column } from "@/types/SalesTypes";
 
 interface SalesTableProps {
-  data: SaleRow[];
+  rows: SaleRow[];
   columns: Column[];
   title?: string;
 }
 
 type SortDirection = "asc" | "desc";
 
-export default function SalesTable({ data, columns, title = "Reporte de Ventas" }: SalesTableProps) {
+export default function SalesTable({ rows, columns, title = "Reporte de Ventas" }: SalesTableProps) {
   const [sortKey, setSortKey] = useState<keyof SaleRow | null>(null);
   const [sortDir, setSortDir] = useState<SortDirection>("asc");
 
@@ -22,7 +22,7 @@ export default function SalesTable({ data, columns, title = "Reporte de Ventas" 
     }
   };
 
-  const sorted = [...data].sort((a, b) => {
+  const sorted = [...rows].sort((a, b) => {
     if (!sortKey) return 0;
     const valA = a[sortKey];
     const valB = b[sortKey];
@@ -34,7 +34,7 @@ export default function SalesTable({ data, columns, title = "Reporte de Ventas" 
       : String(valB).localeCompare(String(valA));
   });
 
-  const totalVentas = data.reduce((sum, row) => sum + row.venta, 0);
+  const totalquantitys = rows.reduce((sum, row) => sum + row.quantity, 0);
 
   return (
     <div
@@ -46,13 +46,13 @@ export default function SalesTable({ data, columns, title = "Reporte de Ventas" 
         <div>
           <h2 className="text-xl font-bold text-gray-800 tracking-tight">{title}</h2>
           <p className="text-xs text-gray-400 mt-0.5">
-            {data.length} productos · Semana {data[0]?.semana}
+            {rows.length} productos · Semana {rows[0]?.week}
           </p>
         </div>
         <div className="text-right">
-          <p className="text-xs text-gray-400 uppercase tracking-widest">Total ventas</p>
+          <p className="text-xs text-gray-400 uppercase tracking-widest">Total Ventas</p>
           <p className="text-2xl font-black text-gray-900">
-            {totalVentas.toLocaleString("es-CO")}
+            {totalquantitys.toLocaleString("es-CO")}
           </p>
         </div>
       </div>
@@ -88,7 +88,7 @@ export default function SalesTable({ data, columns, title = "Reporte de Ventas" 
               const isEven = i % 2 === 0;
               return (
                 <tr
-                  key={row.identificador}
+                  key={row.identificator}
                   className={`
                     transition-colors duration-150
                     ${isEven ? "bg-white" : "bg-gray-50"}
@@ -97,23 +97,23 @@ export default function SalesTable({ data, columns, title = "Reporte de Ventas" 
                   `}
                 >
                   <td className="px-4 py-4 text-center text-sm font-semibold text-gray-800 leading-tight">
-                    {row.producto}
+                    {row.productName}
                   </td>
                   <td className="px-4 py-4 text-center">
                     <span className="inline-block bg-gray-800 text-white text-xs font-mono font-bold px-2.5 py-1 rounded-full tracking-widest">
-                      {row.identificador}
+                      {row.identificator}
                     </span>
                   </td>
                   <td className="px-4 py-4 text-center text-sm font-bold text-gray-900">
-                    {row.venta.toLocaleString("es-CO")}
+                    {row.quantity.toLocaleString("es-CO")}
                   </td>
                   <td className="px-4 py-4 text-center">
                     <span className="inline-block bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-1 rounded-full">
-                      {row.semana}
+                      {row.week}
                     </span>
                   </td>
                   <td className="px-4 py-4 text-center text-sm text-gray-500 font-mono">
-                    {row.fecha}
+                    {row.date}
                   </td>
                 </tr>
               );

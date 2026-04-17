@@ -4,17 +4,23 @@ import type { SalesTableResponse } from "@/types/SalesTypes";
 import { useEffect, useState } from "react";
 
 export default function VisualizeData() {
-    const [response, setResponse]= useState<SalesTableResponse | null>(null)
+    const [table, setTable]= useState<SalesTableResponse | null>(null)
 
     useEffect(() => {
-        getSalesTableData().then(setResponse);
+        const fetchData = async () => {
+            const response = await getSalesTableData();
+            console.log(response.data);
+            
+            setTable(response.data);
+        }
+        fetchData();
     }, [])
 
-    if (!response) {
+    if (!table) {
         return <div>Loading...</div>
     }
 
     return(<>
-        <SalesTable data={response.rows} columns={response.columns} ></SalesTable>
+        <SalesTable rows={table.rows} columns={table.columns} ></SalesTable>
     </>)
 }
