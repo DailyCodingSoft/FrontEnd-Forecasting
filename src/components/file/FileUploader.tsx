@@ -7,8 +7,10 @@ type FileItem = {
   progress: number;
   status: "uploading" | "success" | "error";
 };
-
-const FileUploader = () => {
+type Props = {
+  onDataParsed: (data: any[]) => void;
+};
+const FileUploader = ({ onDataParsed }: Props) => {
   const [files, setFiles] = useState<FileItem[]>([]);
 
   const handleFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,6 +57,7 @@ const FileUploader = () => {
     const data = await parseFile(file);
 
     console.log("Primeras 2 líneas:", data.slice(0, 2));
+    onDataParsed(data);
   } catch (error) {
     console.error("Error leyendo archivo:", error);
   }
@@ -65,7 +68,13 @@ const FileUploader = () => {
       
       {/* Dropzone */}
       <label className="w-[500px] h-[250px] border-2 border-dashed border-black flex flex-col items-center justify-center cursor-pointer">
-        <input type="file" multiple className="hidden" onChange={handleFiles} />
+        <input 
+          type="file"
+          multiple
+          accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+          className="hidden" 
+          onChange={handleFiles} 
+        />
 
         <p className="font-semibold">
           ARRASTRA O SELECCIONA UN ARCHIVO
