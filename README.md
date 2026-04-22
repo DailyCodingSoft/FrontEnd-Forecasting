@@ -1,3 +1,5 @@
+probando las reglas y el .yml
+
 # 🚀 Frontend Repository
 
 Bienvenido al repositorio del frontend del proyecto. Este proyecto está construido con herramientas modernas enfocadas en rendimiento, escalabilidad y buenas prácticas de desarrollo.
