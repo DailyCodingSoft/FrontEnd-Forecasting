@@ -1,0 +1,41 @@
+name: Validate PR source branch
+
+on:
+  pull_request_target:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
+
+jobs:
+  check-source-branch:
+    name: Only allow PRs from dev
+    if: github.base_ref == 'main'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Close PR if source branch is not dev
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          echo "BASE: ${{ github.base_ref }}"
+          echo "HEAD: ${{ github.head_ref }}"
+          echo "EVENT: ${{ github.event_name }}"
+          echo "Source branch: ${{ github.head_ref }}"
+          if [ "${{ github.head_ref }}" != "dev" ]; then
+            echo "❌ Source branch is '${{ github.head_ref }}'. Closing PR..."
+
+            gh pr close ${{ github.event.pull_request.number }} \
+              --repo ${{ github.repository }} \
+              --comment "❌ **PR cerrado automáticamente.**
+
+          Solo se aceptan pull requests hacia \`main\` que provengan de la rama \`dev\`.
+          Tu PR fue abierto desde \`${{ github.head_ref }}\`.
+
+          Por favor, integra tus cambios a \`dev\` primero y abre el PR desde ahí."
+
+            exit 1
+          fi
+
+          echo "✅ Source branch is 'dev'. PR is valid."
