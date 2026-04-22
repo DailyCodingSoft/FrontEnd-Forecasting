@@ -26,13 +26,13 @@ const FileUploader = ({ onDataParsed }: Props) => {
     setFiles(newFiles);
 
     newFiles.forEach((fileItem, index) => {
-      simulateUpload(fileItem, index);
+      simulateUpload(index);
       readFile(fileItem.file);
     });
   };
 
   // 🧠 Simula carga
-  const simulateUpload = (fileItem: FileItem, index: number) => {
+  const simulateUpload = (index: number) => {
     let progress = 0;
 
     const interval = setInterval(() => {
