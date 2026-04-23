@@ -22,9 +22,9 @@ const UploadPage = () => {
   // 👇 función que convierte Excel -> DTO .NET
   const mapToDto = (rows: any[]) => {
   return rows
-    .map((row, index) => {
-      const rawDate = row[4];
-      const parsedDate = new Date(rawDate);
+    .map((row) => {
+      //const rawDate = row[4];
+      //const parsedDate = new Date(rawDate);
 
       return {
         productName: row[0],
