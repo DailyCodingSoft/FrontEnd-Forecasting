@@ -3,7 +3,7 @@ import Button from "@/components/ui/Button";
 import Title from "@/components/ui/Title";
 import Modal from "@/components/ui/Modal";
 import FileUploader from "@/components/file/FileUploader";
-import {insertSalesTableData} from '@/services/sales'
+import { insertSalesTableData } from '@/services/sales'
 import parseDate from "@/utils/dates/ParseDate";
 
 // 👇 tipo opcional (pero recomendado)
@@ -19,25 +19,34 @@ const UploadPage = () => {
   const [open, setOpen] = useState(false);
   const [parsedData, setParsedData] = useState<RawRow[]>([]);
 
-  // 👇 función que convierte Excel -> DTO .NET
+  const parseNumber = (value: string | number) => {
+    if (typeof value === "number") return value;
+
+    if (typeof value === "string") {
+      return Number(
+        value
+          .replace(/\./g, "")   // quita miles
+          .replace(",", ".")    // decimal
+      );
+    }
+
+    return 0;
+  };
+
   const mapToDto = (rows: any[]) => {
-  return rows
-    .map((row) => {
-      //const rawDate = row[4];
-      //const parsedDate = new Date(rawDate);
+    return rows.map((row) => {
+      // detectar si es array o objeto
+      const isArray = Array.isArray(row);
 
       return {
-        productName: row[0],
-        identificator: row[1],
-        quantity: Number(row[2]) || 0,
-        week: Number(row[3]) || 0,
-        date: parseDate(row[4]), // 👈 ahora seguro
+        productName: isArray ? row[0] : row.Producto,
+        identificator: (isArray ? row[1] : row.Identificador),
+        quantity: (isArray ? row[2] : parseNumber(row.Venta)),
+        week: Number(isArray ? row[3] : row.Semana) || 0,
+        date: parseDate(isArray ? row[4] : row.Fecha),
       };
-    })
-    .filter(Boolean); // 👈 elimina nulls
-};
-  console.log("Datos PARSEADOS (antes de mapear):", parsedData.length);
-  console.log("Datos despues de passear", mapToDto.length) // 👈 revisar datos parseados
+    });
+  };
   // 👇 función que ENVÍA al backend
   const handleUpload = async () => {
     try {
@@ -46,11 +55,12 @@ const UploadPage = () => {
         return;
       }
       console.log("Datos a enviar:", parsedData.slice(0, 2)); // 👈 revisar datos antes de enviar
+      console.log("Fila ejemplo:", parsedData[0]);
       const mappedData = mapToDto(parsedData);
 
       const response = await insertSalesTableData(mappedData);
 
-      if (!response.ok) throw new Error("Error en la carga");
+      console.log("Respuesta backend:", response.data);
 
       setOpen(true); // 👈 abre modal SOLO si todo sale bien
     } catch (error) {

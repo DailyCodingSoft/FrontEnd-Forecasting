@@ -15,13 +15,20 @@ const parseDate = (value: any) => {
 
   // 🔥 Caso 3: string tipo "03/11/2026"
   if (typeof value === "string") {
-    const parts = value.split("/");
+  const parts = value.split("/");
 
-    if (parts.length === 3) {
-      const [day, month, year] = parts;
-      return `${year}-${month}-${day}T00:00:00Z`;
-    }
+  if (parts.length === 3) {
+    const [day, month, year] = parts;
+
+    const date = new Date(
+      Number(year),
+      Number(month) - 1,
+      Number(day)
+    );
+
+    return date.toISOString(); // 👈 igual que Excel
   }
+}
 
   // ✅ Caso 4: número (Excel serial)
   if (typeof value === "number") {
