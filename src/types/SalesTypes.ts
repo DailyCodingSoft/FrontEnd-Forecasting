@@ -13,5 +13,5 @@ export interface Column {
 
 export interface SalesTableResponse {
     rows: SaleRow[];
-    columns: Column[];
+    columns: (keyof SaleRow)[];
 }
