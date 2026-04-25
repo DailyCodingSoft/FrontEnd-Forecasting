@@ -1,6 +1,8 @@
+import DateFilter from "@/components/ui/DateFilter";
 import SalesTable from "@/components/ui/SalesTable";
 import { getSalesTableData } from "@/services/sales";
 import type { SalesTableResponse } from "@/types/SalesTypes";
+import type { dateFilterData } from "@/types/filtersTypes";
 import { useEffect, useState } from "react";
 
 export default function VisualizeData() {
@@ -16,11 +18,16 @@ export default function VisualizeData() {
         fetchData();
     }, [])
 
+    const sendFilters = (data: dateFilterData) => {
+        console.log('sending data: ', data)
+    }
+
     if (!table) {
         return <div>Loading...</div>
     }
 
     return(<>
         <SalesTable rows={table.rows} columns={table.columns} ></SalesTable>
+        <DateFilter onSubmit={sendFilters} ></DateFilter>
     </>)
 }
