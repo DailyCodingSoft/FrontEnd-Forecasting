@@ -31,7 +31,7 @@ export default function DateFilter(props: {onSubmit: (data: dateFilterData) => v
 
     const[availableDays, setAvailableDays] = useState<number[]>(Array.from({ length: getDaysInMonth(new Date(parseInt(year), parseInt(month)))}, (_, i) => 1+i));
     const[availableMonths, setAvailableMonths] = useState<number[]>(Array.from({ length: getMonth(new Date())+1}, (_, i) => i))
-    const[availableWeek, setAvailableWeek] = useState<number[]>(Array.from({ length: getWeek(new Date())}, (_, i) => 1+i))
+    const[availableWeek, setAvailableWeek] = useState<number[]>(Array.from({ length: getWeek(new Date())+1}, (_, i) => 1+i))
     
     const availableYears = Array.from({ length: parseInt(currentYear) - 1999 + 1}, (_, i) => i + 1999);
 
@@ -60,50 +60,75 @@ export default function DateFilter(props: {onSubmit: (data: dateFilterData) => v
     function sendData() {
         props.onSubmit({year, month:(parseInt(month)+1).toString(), day, week})
     }
+    const pillSelect = "bg-blue-100 hover:bg-blue-200 text-blue-800 font-medium text-sm rounded-full px-4 py-2 border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer transition-colors duration-150";
 
-    return (<>
-        <label>
-            Año:
-            <select name="year_selector" value={year} onChange={e => onChangeYear(e.target.value)}  >
-                {
-                    availableYears.map((year) => (
-                        <option key={year} value={year}>
-                            {year}
-                        </option>
-                    ))
-                }
-            </select>
-        </label>
-        <label>
-            Mes:
-            <select name='monthSelector' value={month} onChange={e => onChangeMonth(e.target.value)}>
-                {availableMonths.map((n) => (
-                        <option key={n} value={n}>
-                            {monthDictionary[n]}
-                        </option>
-                    ))
-                }
-            </select>   
-        </label>
-        <label>
-            Dia:
-            <select name='daySelector' value={day} onChange={e => setDay(e.target.value)}>
-                {availableDays.map((day) => (
-                    <option key={day} value={day}>
-                        {day}
-                    </option>
-                ))}
-            </select>
-        </label>
-        <label>
-            <select name='weekSelector' value={week} onChange={e => setWeek(e.target.value)}>
-                {availableWeek.map((week) => (
-                    <option key={week} value={week}>
-                        {week}
-                    </option>
-                ))}
-            </select>
-        </label>
-        <Button label="Filtrar" onClick={sendData} />
-    </>)
+    return (
+        <div className="flex flex-col items-center gap-4 p-6 bg-white rounded-2xl shadow-md w-fit">
+            <h2 className="text-sm font-semibold tracking-widest text-gray-500 uppercase">
+                Filtro por Fecha
+            </h2>
+
+            <div className="flex flex-wrap justify-center gap-3">
+                <label className="flex items-center gap-2">
+                    <span className="text-sm font-medium text-gray-600">Año</span>
+                    <select
+                        name="year_selector"
+                        value={year}
+                        onChange={e => onChangeYear(e.target.value)}
+                        className={pillSelect}
+                    >
+                        {availableYears.map((y) => (
+                            <option key={y} value={y}>{y}</option>
+                        ))}
+                    </select>
+                </label>
+
+                <label className="flex items-center gap-2">
+                    <span className="text-sm font-medium text-gray-600">Mes</span>
+                    <select
+                        name="monthSelector"
+                        value={month}
+                        onChange={e => onChangeMonth(e.target.value)}
+                        className={pillSelect}
+                    >
+                        {availableMonths.map((n) => (
+                            <option key={n} value={n}>{monthDictionary[n]}</option>
+                        ))}
+                    </select>
+                </label>
+
+                <label className="flex items-center gap-2">
+                    <span className="text-sm font-medium text-gray-600">Día</span>
+                    <select
+                        name="daySelector"
+                        value={day}
+                        onChange={e => setDay(e.target.value)}
+                        className={pillSelect}
+                    >
+                        {availableDays.map((d) => (
+                            <option key={d} value={d}>{d}</option>
+                        ))}
+                    </select>
+                </label>
+            </div>
+
+            <div className="flex justify-center">
+                <label className="flex items-center gap-2">
+                    <span className="text-sm font-medium text-gray-600">Semana</span>
+                    <select
+                        name="weekSelector"
+                        value={week}
+                        onChange={e => setWeek(e.target.value)}
+                        className={pillSelect}
+                    >
+                        {availableWeek.map((w) => (
+                            <option key={w} value={w}>{w}</option>
+                        ))}
+                    </select>
+                </label>
+            </div>
+
+            <Button label="Filtrar" onClick={sendData} />
+        </div>
+    );
 }

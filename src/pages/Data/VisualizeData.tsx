@@ -27,7 +27,7 @@ export default function VisualizeData() {
     }
 
     return(<>
-        <SalesTable rows={table.rows} columns={table.columns} ></SalesTable>
         <DateFilter onSubmit={sendFilters} ></DateFilter>
+        <SalesTable rows={table.rows} columns={table.columns} ></SalesTable>
     </>)
 }
