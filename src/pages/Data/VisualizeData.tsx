@@ -28,6 +28,6 @@ export default function VisualizeData() {
 
     return(<>
         <DateFilter onSubmit={sendFilters} ></DateFilter>
-        <SalesTable rows={table.rows} columns={table.columns} ></SalesTable>
+        <SalesTable rows={table.rows} cols={table.columns} ></SalesTable>
     </>)
 }

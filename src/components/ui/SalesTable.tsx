@@ -1,17 +1,22 @@
 import { useState } from "react";
-import type { SaleRow, Column } from "@/types/SalesTypes";
+import type { Column, SaleRow } from "@/types/SalesTypes";
 
 interface SalesTableProps {
   rows: SaleRow[];
-  columns: Column[];
+  cols: (keyof SaleRow)[];
   title?: string;
 }
 
 type SortDirection = "asc" | "desc";
 
-export default function SalesTable({ rows, columns, title = "Reporte de Ventas" }: SalesTableProps) {
+export default function SalesTable({ rows, cols, title = "Reporte de Ventas" }: SalesTableProps) {
   const [sortKey, setSortKey] = useState<keyof SaleRow | null>(null);
   const [sortDir, setSortDir] = useState<SortDirection>("asc");
+
+  const columns: Column[] = cols.map(c => ({
+      key: c,
+      label: c
+  }));
 
   const handleSort = (key: keyof SaleRow): void => {
     if (sortKey === key) {
@@ -35,7 +40,6 @@ export default function SalesTable({ rows, columns, title = "Reporte de Ventas" 
   });
 
   const totalquantitys = rows.reduce((sum, row) => sum + row.quantity, 0);
-
   return (
     <div
       style={{ fontFamily: "'DM Sans', 'Segoe UI', sans-serif" }}
@@ -88,7 +92,7 @@ export default function SalesTable({ rows, columns, title = "Reporte de Ventas" 
               const isEven = i % 2 === 0;
               return (
                 <tr
-                  key={row.identificator}
+                  key={`${row.identificator}-${row.week}`}
                   className={`
                     transition-colors duration-150
                     ${isEven ? "bg-white" : "bg-gray-50"}
