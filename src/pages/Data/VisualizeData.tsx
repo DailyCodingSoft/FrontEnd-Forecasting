@@ -10,7 +10,6 @@ import {getRowsForTable} from "@/utils/files/DataFilter";
 
 export default function VisualizeData() {
     const [table, setTable] = useState<SalesTableResponse | null>(null)
-    const [selectedProduct, setSelectedProduct] = useState<string>("");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -67,7 +66,7 @@ const formatDate = (date: Date) => {
     );
 
     setTable({
-      columns: ["productName", "identificator", "quantity", "week", "date"],
+        columns: ['productName', 'identificator', 'quantity', 'week', 'date'],
         rows: rows
     });
 };
@@ -75,7 +74,6 @@ const formatDate = (date: Date) => {
     if (!table) {
         return <div>Loading...</div>
     }
-
     return (<>
         <DateFilter onSubmit={sendFilters} ></DateFilter>
         <SalesGraph rows={table.rows} ></SalesGraph>

@@ -22,8 +22,6 @@ const monthDictionary: Record<number, string> = {
 
 const currentYear = (new Date().getFullYear()).toString();
 const currentMonth = (new Date().getMonth()).toString();
-const currentDay = (getDate(new Date())).toString();
-const currentWeek = (getWeek(new Date())).toString();
 
 export default function DateFilter(props: { onSubmit: (data: dateFilterData, product: Product | null) => void }) {
     const [year, setYear] = useState<string>();
