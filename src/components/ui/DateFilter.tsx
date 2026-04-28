@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Button from './Button'
 import { getDate, getDaysInMonth, getMonth, getWeek } from 'date-fns';
 import type { dateFilterData } from '@/types/filtersTypes';
+import { getProducts } from "@/services/sales";
+import type { Product } from "@/types/products";
 
 const monthDictionary: Record<number, string> = {
     0: "Enero",
@@ -23,44 +25,64 @@ const currentMonth = (new Date().getMonth()).toString();
 const currentDay = (getDate(new Date())).toString();
 const currentWeek = (getWeek(new Date())).toString();
 
-export default function DateFilter(props: {onSubmit: (data: dateFilterData) => void}) {
-    const [year, setYear] = useState(currentYear);
-    const [month, setMonth] = useState(currentMonth);
-    const [day, setDay] = useState(currentDay);
-    const [week, setWeek] = useState(currentWeek);
+export default function DateFilter(props: { onSubmit: (data: dateFilterData, product: Product | null) => void }) {
+    const [year, setYear] = useState<string>();
+    const [month, setMonth] = useState<string>();
+    const [day, setDay] = useState<string>();
+    const [week, setWeek] = useState<string>();
 
-    const[availableDays, setAvailableDays] = useState<number[]>(Array.from({ length: getDaysInMonth(new Date(parseInt(year), parseInt(month)))}, (_, i) => 1+i));
-    const[availableMonths, setAvailableMonths] = useState<number[]>(Array.from({ length: getMonth(new Date())+1}, (_, i) => i))
-    const[availableWeek, setAvailableWeek] = useState<number[]>(Array.from({ length: getWeek(new Date())+1}, (_, i) => 1+i))
-    
-    const availableYears = Array.from({ length: parseInt(currentYear) - 1999 + 1}, (_, i) => i + 1999);
+
+    const [availableDays, setAvailableDays] = useState<number[]>(Array.from({ length: getDaysInMonth(new Date(parseInt(currentYear), parseInt(currentMonth))) }, (_, i) => 1 + i));
+    const [availableMonths, setAvailableMonths] = useState<number[]>(Array.from({ length: getMonth(new Date()) + 1 }, (_, i) => i))
+    const [availableWeek, setAvailableWeek] = useState<number[]>(Array.from({ length: getWeek(new Date()) + 1 }, (_, i) => 1 + i))
+
+    const availableYears = Array.from({ length: parseInt(currentYear) - 1999 + 1 }, (_, i) => i + 1999);
 
     // console.log(`currentyear : ${ parseInt(currentYear)} \n
     //             currentmonth : ${availableMonths} \n
     //             currentweek : ${currentWeek} \n
     //             currentday : ${availableDays}`)
+    const [products, setProducts] = useState<Product[]>([]);
+    const [selectedProduct, setSelectedProduct] = useState<string>("");
 
+    useEffect(() => {
+        const fetchProducts = async () => {
+            const response = await getProducts();
+            const mapped = response.map((item: any) => ({
+                identificator: item.identificator,
+                productName: item.productName,
+            }));
+            setProducts(mapped);
+        };
+
+        fetchProducts();
+    }, []);
     function onChangeYear(value: string) {
         setYear(value)
-        if(value != currentYear) {
-            setAvailableMonths(Array.from({ length: 12}, (_, i) => i))
-            setAvailableWeek(Array.from({ length: 52}, (_, i) => 1+i))
+        if (value != currentYear) {
+            setAvailableMonths(Array.from({ length: 12 }, (_, i) => i))
+            setAvailableWeek(Array.from({ length: 52 }, (_, i) => 1 + i))
         }
         else {
-            setAvailableWeek(Array.from({ length: getWeek(new Date())+1}, (_, i) => 1+i))
-            setAvailableMonths(Array.from({ length: getMonth(new Date())+1}, (_, i) => i))
+            setAvailableWeek(Array.from({ length: getWeek(new Date()) + 1 }, (_, i) => 1 + i))
+            setAvailableMonths(Array.from({ length: getMonth(new Date()) + 1 }, (_, i) => i))
         }
     }
 
     function onChangeMonth(value: string) {
         setMonth(value)
-        setAvailableDays(Array.from({ length: getDaysInMonth(new Date(parseInt(year), parseInt(value)))}, (_, i) => 1+i))
+        if (year)
+        setAvailableDays(Array.from({ length: getDaysInMonth(new Date(parseInt(year), parseInt(value))) }, (_, i) => 1 + i))
     }
 
     function sendData() {
-        props.onSubmit({year, month:(parseInt(month)+1).toString(), day, week})
+        const selectMonth = month ? parseInt(month) + 1 : "";
+        props.onSubmit({ year: year || "", month: selectMonth.toString(), day: day || "", week: week || "" },  products.find(p => p.identificator === selectedProduct) ?? null);
     }
     const pillSelect = "bg-blue-100 hover:bg-blue-200 text-blue-800 font-medium text-sm rounded-full px-4 py-2 border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer transition-colors duration-150";
+    const handleChange = (value: string) => {
+        setSelectedProduct(value);
+    };
 
     return (
         <div className="flex flex-col items-center gap-4 p-6 bg-white rounded-2xl shadow-md w-fit">
@@ -77,6 +99,10 @@ export default function DateFilter(props: {onSubmit: (data: dateFilterData) => v
                         onChange={e => onChangeYear(e.target.value)}
                         className={pillSelect}
                     >
+
+                        <option value="">
+                            Seleccionar
+                        </option>
                         {availableYears.map((y) => (
                             <option key={y} value={y}>{y}</option>
                         ))}
@@ -91,6 +117,10 @@ export default function DateFilter(props: {onSubmit: (data: dateFilterData) => v
                         onChange={e => onChangeMonth(e.target.value)}
                         className={pillSelect}
                     >
+
+                        <option value="">
+                            Seleccionar
+                        </option>
                         {availableMonths.map((n) => (
                             <option key={n} value={n}>{monthDictionary[n]}</option>
                         ))}
@@ -105,8 +135,12 @@ export default function DateFilter(props: {onSubmit: (data: dateFilterData) => v
                         onChange={e => setDay(e.target.value)}
                         className={pillSelect}
                     >
+
+                        <option value="">
+                            Seleccionar
+                        </option>
                         {availableDays.map((d) => (
-                            <option key={d} value={d}>{d}</option>
+                            <option key={d} value={String(d)}>{d}</option>
                         ))}
                     </select>
                 </label>
@@ -121,8 +155,31 @@ export default function DateFilter(props: {onSubmit: (data: dateFilterData) => v
                         onChange={e => setWeek(e.target.value)}
                         className={pillSelect}
                     >
+
+                        <option value="">
+                            Seleccionar
+                        </option>
                         {availableWeek.map((w) => (
                             <option key={w} value={w}>{w}</option>
+                        ))}
+                    </select>
+                </label>
+                <label className="flex items-center gap-2">
+                    <span className="text-sm font-medium text-gray-600">Producto</span>
+                    <select
+                        value={selectedProduct}
+                        onChange={(e) => handleChange(e.target.value)}
+                        className={pillSelect}
+                    >
+
+                        <option value="" disabled>
+                            Seleccionar producto
+                        </option>
+
+                        {products.map((p) => (
+                            <option key={p.identificator} value={p.identificator}>
+                                {p.productName}
+                            </option>
                         ))}
                     </select>
                 </label>
