@@ -12,4 +12,19 @@ export async function insertSalesTableData(data: any[]) {
     rows: data
   });
   return res.data;
+
+}
+
+export  async function getProducts():Promise<any> {
+    const res = await api.get("/product");
+    return res.data;
+}
+
+export async function getSalesTableDataByFilters(from: string|null, to: string|null, product: string|null):Promise<any> {
+    const res = await api.post("sales/grouped", {
+      identificator: product,
+      from: from,
+      to: to
+    })
+    return res.data;
 }
