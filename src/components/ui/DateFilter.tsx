@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Button from './Button'
-import { getDate, getDaysInMonth, getMonth, getWeek } from 'date-fns';
+import { getDaysInMonth, getMonth, getWeek } from 'date-fns';
 import type { dateFilterData } from '@/types/filtersTypes';
 import { getProducts } from "@/services/sales";
 import type { Product } from "@/types/products";

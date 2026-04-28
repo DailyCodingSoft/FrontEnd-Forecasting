@@ -1,4 +1,3 @@
-import { IDLE_NAVIGATION } from "react-router-dom";
 import { api } from "./api";
 
 //To Do: usar axios para obtener la data del backend
