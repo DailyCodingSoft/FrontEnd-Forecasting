@@ -61,7 +61,7 @@ const UploadPage = () => {
       const mappedData = mapToDto(parsedData);
 
       const response = await insertSalesTableData(mappedData);
-
+      console.log("Respuesta del servidor:", response);
       setParsedData([]);
       setHasError(false);
       setResetKey(prev => prev + 1);
@@ -75,6 +75,7 @@ const UploadPage = () => {
     setParsedData([]);
     setHasError(false);
     setResetKey(prev => prev + 1); // 👈 fuerza reset del uploader
+    console.log("Carga cancelada, estado reseteado", hasError);
   };
 
   return (
