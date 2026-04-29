@@ -18,6 +18,8 @@ type RawRow = {
 const UploadPage = () => {
   const [open, setOpen] = useState(false);
   const [parsedData, setParsedData] = useState<RawRow[]>([]);
+  const [resetKey, setResetKey] = useState(0);
+  const [hasError, setHasError] = useState(false);
 
   const parseNumber = (value: string | number) => {
     if (typeof value === "number") return value;
@@ -59,13 +61,21 @@ const UploadPage = () => {
       const mappedData = mapToDto(parsedData);
 
       const response = await insertSalesTableData(mappedData);
-
-      console.log("Respuesta backend:", response.data);
-
+      console.log("Respuesta del servidor:", response);
+      setParsedData([]);
+      setHasError(false);
+      setResetKey(prev => prev + 1);
       setOpen(true); // 👈 abre modal SOLO si todo sale bien
     } catch (error) {
       console.error("Error:", error);
     }
+  };
+
+  const handleCancel = () => {
+    setParsedData([]);
+    setHasError(false);
+    setResetKey(prev => prev + 1); // 👈 fuerza reset del uploader
+    console.log("Carga cancelada, estado reseteado", hasError);
   };
 
   return (
@@ -73,12 +83,12 @@ const UploadPage = () => {
       <Title text="CARGAR ARCHIVO EXCEL/CSV" />
 
       {/* 👇 aquí recibes los datos del uploader */}
-      <FileUploader onDataParsed={setParsedData} />
+      <FileUploader onDataParsed={setParsedData} resetTrigger={resetKey} onError={setHasError} />
 
       <div className="flex flex-col md:flex-row gap-4 mt-6 w-full md:w-auto">
         {/* 👇 ESTE ES EL CAMBIO CLAVE */}
         <Button label="Cargar" variant="success" onClick={handleUpload} />
-        <Button label="Cancelar" variant="danger" />
+        <Button label="Cancelar" variant="danger" onClick={handleCancel} />
       </div>
 
       <Modal
