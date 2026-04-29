@@ -1,5 +1,5 @@
 // components/file/FileUploader.tsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import parseFile from "@/utils/files/importer_datos";
 
 type FileItem = {
@@ -10,11 +10,17 @@ type FileItem = {
 
 type Props = {
   onDataParsed: (data: any[]) => void;
+  resetTrigger: number;
+  onError: (hasError: boolean) => void;
 };
 
-const FileUploader = ({ onDataParsed }: Props) => {
+const FileUploader = ({ onDataParsed, resetTrigger, onError }: Props) => {
   const [files, setFiles] = useState<FileItem[]>([]);
   const [isDragging, setIsDragging] = useState(false);
+
+  useEffect(() => {
+    setFiles([]);
+  }, [resetTrigger]);
 
   // 🔥 Procesar archivos (reutilizable)
   const processFiles = (fileList: FileList) => {
@@ -28,7 +34,7 @@ const FileUploader = ({ onDataParsed }: Props) => {
 
     newFiles.forEach((fileItem, index) => {
       simulateUpload(index);
-      readFile(fileItem.file);
+      readFile(fileItem.file, index);
     });
   };
 
@@ -84,20 +90,31 @@ const FileUploader = ({ onDataParsed }: Props) => {
   };
 
   // 📖 Leer archivo
-  const readFile = async (file: File) => {
+  const readFile = async (file: File, index: number) => {
     try {
       const data = await parseFile(file);
-
-      console.log("Primeras 2 líneas:", data.slice(0, 2));
+      setFiles((prev) => {
+        const updated = [...prev];
+        updated[index].status = "success";
+        return updated;
+      });
       onDataParsed(data);
+      onError(false);
     } catch (error) {
       console.error("Error leyendo archivo:", error);
+      setFiles((prev) => {
+        const updated = [...prev];
+        updated[index].status = "error";
+        return updated;
+      });
+
+      onError(true);
     }
   };
 
   return (
     <div className="flex flex-col md:flex-row gap-6 items-center">
-      
+
       {/* Dropzone */}
       <label
         className={`w-[500px] h-[250px] border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition
@@ -123,18 +140,17 @@ const FileUploader = ({ onDataParsed }: Props) => {
       <div className="flex flex-col gap-4">
         {files.map((item, i) => (
           <div key={i} className="w-full md:w-[300px]">
-            
+
             <p className="text-sm font-medium">{item.file.name}</p>
 
             <div className="w-full h-3 bg-gray-200 rounded mt-1">
               <div
-                className={`h-3 rounded transition-all ${
-                  item.status === "error"
-                    ? "bg-red-500"
-                    : item.status === "success"
+                className={`h-3 rounded transition-all ${item.status === "error"
+                  ? "bg-red-500"
+                  : item.status === "success"
                     ? "bg-green-500"
                     : "bg-green-300"
-                }`}
+                  }`}
                 style={{ width: `${item.progress}%` }}
               />
             </div>
