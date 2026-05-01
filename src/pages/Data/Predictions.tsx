@@ -4,6 +4,7 @@ import PredictionInput from "@/components/ui/PredictionInput"
 import { getSalesTableData } from "@/services/sales";
 import type { SalesTableResponse, SaleRow } from "@/types/SalesTypes";
 import SalesTable from "@/components/ui/SalesTable";
+import { format } from 'date-fns';
 
 export default function Predictions() {
     const [table, setTable] = useState<SalesTableResponse | null>(null)
@@ -25,7 +26,7 @@ export default function Predictions() {
             productName: product[1],//si en algun momento el sku no coincide con el nombre del producto es culpa de esta linea.
             identificator: prediction.product_identifier,
             week: parseInt(prediction.week),
-            date: Date.now().toString(),
+            date: format(Date.now(), "yyyy-dd-MM"),
             quantity: prediction.sales,
             isPrediction: true
         }
@@ -40,8 +41,8 @@ export default function Predictions() {
     }
 
     return (<>
-        <h1>my prediction page</h1>
+        <h1>Predictions</h1>
         <PredictionInput onSubmit={fetchData}/>
-        <SalesTable rows={table.rows} cols={table.columns} ></SalesTable>
+        <SalesTable rows={table.rows} cols={table.columns} sort_key={table.columns.find((c) => c == 'week')}  sort_dir={"desc"} ></SalesTable>
     </>)
 }
