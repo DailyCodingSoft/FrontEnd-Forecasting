@@ -1,23 +1,21 @@
 import { getPrediction } from "@/services/predictions"
-import { useEffect, useState } from "react"
+import { getRowsForTable } from "@/utils/files/DataFilter";
+import { useState } from "react"
 import PredictionInput from "@/components/ui/PredictionInput"
-import { getSalesTableData } from "@/services/sales";
 import type { SalesTableResponse, SaleRow } from "@/types/SalesTypes";
 import SalesTable from "@/components/ui/SalesTable";
+import SalesGraph from "@/components/ui/SalesGraph";
 import { format } from 'date-fns';
 
 export default function Predictions() {
     const [table, setTable] = useState<SalesTableResponse | null>(null)
-    const [original_table, setOriginal_table] = useState<SalesTableResponse | null>(null)
     
-        useEffect(() => {
-            const fetchData = async () => {
-                const response = await getSalesTableData();
-                setTable(response.data);
-                setOriginal_table(response.data);
-            }
-            fetchData();
-        }, [])
+    //corregir esto cuando se solucione lo de obtener ventas filtradas.
+    async function fetchTable(identificator: string, prediction: SaleRow) {
+        const rows = await getRowsForTable(null, null, identificator);
+        const predict_table = rows.concat(prediction)
+        setTable({rows: predict_table, columns: ['productName', 'identificator', 'quantity', 'week', 'date']});
+    }
 
     async function fetchData(product: [string,string]) {
         const response = await getPrediction(product[0])
@@ -30,19 +28,24 @@ export default function Predictions() {
             quantity: prediction.sales,
             isPrediction: true
         }
-        if(table && original_table) {
-            const newRows = original_table.rows.concat(forecast_row)
-            setTable({rows: newRows, columns: table.columns})
-        }
+        fetchTable(product[0], forecast_row)
     }
 
     if (!table) {
-        return <div>Loading...</div>
+        return (
+            <>
+                <h1>Predictions</h1>
+                <div>Selecciona un producto para ver realizar la prediccion</div>
+                <PredictionInput onSubmit={fetchData}/>
+            </>
+        )
+        
     }
 
     return (<>
         <h1>Predictions</h1>
         <PredictionInput onSubmit={fetchData}/>
+        <SalesGraph rows={table.rows} ></SalesGraph>
         <SalesTable rows={table.rows} cols={table.columns} sort_key={table.columns.find((c) => c == 'week')}  sort_dir={"desc"} ></SalesTable>
     </>)
 }
