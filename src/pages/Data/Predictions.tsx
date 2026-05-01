@@ -1,22 +1,47 @@
 import { getPrediction } from "@/services/predictions"
 import { useEffect, useState } from "react"
-import ProductSelecter from "@/components/ui/ProductSelecter"
+import PredictionInput from "@/components/ui/PredictionInput"
+import { getSalesTableData } from "@/services/sales";
+import type { SalesTableResponse, SaleRow } from "@/types/SalesTypes";
+import SalesTable from "@/components/ui/SalesTable";
+
 export default function Predictions() {
-    const [product, setProduct] = useState("")
-    useEffect(() => {
-        if (!product) return; // evita llamada vacía
+    const [table, setTable] = useState<SalesTableResponse | null>(null)
+    const [original_table, setOriginal_table] = useState<SalesTableResponse | null>(null)
+    
+        useEffect(() => {
+            const fetchData = async () => {
+                const response = await getSalesTableData();
+                setTable(response.data);
+                setOriginal_table(response.data);
+            }
+            fetchData();
+        }, [])
 
-        const fetchData = async () => {
-            const response = await getPrediction(product)
-            console.log(response)
+    async function fetchData(product: [string,string]) {
+        const response = await getPrediction(product[0])
+        const prediction = response.data
+        const forecast_row: SaleRow = {
+            productName: product[1],//si en algun momento el sku no coincide con el nombre del producto es culpa de esta linea.
+            identificator: prediction.product_identifier,
+            week: parseInt(prediction.week),
+            date: Date.now().toString(),
+            quantity: prediction.sales,
+            isPrediction: true
         }
+        if(table && original_table) {
+            const newRows = original_table.rows.concat(forecast_row)
+            setTable({rows: newRows, columns: table.columns})
+        }
+    }
 
-        fetchData()
-    }, [product])
+    if (!table) {
+        return <div>Loading...</div>
+    }
 
     return (<>
         <h1>my prediction page</h1>
-        <ProductSelecter onSelect={(value) => setProduct(value)} />
-        <h1>{product}</h1>
+        <PredictionInput onSubmit={fetchData}/>
+        <SalesTable rows={table.rows} cols={table.columns} ></SalesTable>
     </>)
 }

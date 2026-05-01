@@ -95,7 +95,7 @@ export default function SalesTable({ rows, cols, title = "Reporte de Ventas" }: 
                   key={`${row.identificator}-${row.week}`}
                   className={`
                     transition-colors duration-150
-                    ${isEven ? "bg-white" : "bg-gray-50"}
+                    ${row.isPrediction ? "bg-cyan-300" : isEven ? "bg-white" : "bg-gray-50"}
                     hover:bg-amber-50
                     ${isLast ? "last:rounded-b-2xl" : "border-b border-gray-100"}
                   `}

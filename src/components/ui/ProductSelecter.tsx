@@ -7,10 +7,10 @@ type Product = {
 };
 
 type Props = {
-  onSelect: (value: string) => void;
+  onSelect: (product: [string, string]) => void;
 };
 
-export default function ProductSelecter( { onSelect }: Props ) {
+export default function ProductSelector( { onSelect }: Props ) {
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<string>("");
 
@@ -27,9 +27,9 @@ export default function ProductSelecter( { onSelect }: Props ) {
     fetchProducts();
   }, []);
 
-   const handleChange = (value: string) => {
-    setSelectedProduct(value);
-    onSelect(value); // 👈 aquí “envías” el dato al padre
+   const handleChange = (product: [string, string]) => {
+    setSelectedProduct(product[0]);
+    onSelect(product); // 👈 aquí “envías” el dato al padre
   };
 
   return (
@@ -40,7 +40,7 @@ export default function ProductSelecter( { onSelect }: Props ) {
 
       <select
         value={selectedProduct}
-        onChange={(e) => handleChange(e.target.value)}
+        onChange={(e) => handleChange([e.target.value, products[e.target.selectedIndex-1].productName])}
         className="border rounded-lg px-3 py-2"
       >
         <option value="">-- Selecciona --</option>

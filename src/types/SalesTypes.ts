@@ -4,6 +4,7 @@ export interface SaleRow {
   quantity: number;
   week: number;
   date: string;
+  isPrediction?: boolean
 }
 
 export interface Column {
