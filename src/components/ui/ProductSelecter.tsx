@@ -17,12 +17,10 @@ export default function ProductSelecter( { onSelect }: Props ) {
   useEffect(() => {
     const fetchProducts = async () => {
       const response = await getProducts();
-        console.log("Productos obtenidos del backend:", response); // 👈 revisar respuesta del backend
-      const mapped = response.products.map((item: any) => ({
+      const mapped = response.map((item: any) => ({
         identificator: item.identificator,
         productName: item.productName,
       }));
-      console.log("Productos mapeados para el select:", mapped); // 👈 revisar datos mapeados
       setProducts(mapped);
     };
 
