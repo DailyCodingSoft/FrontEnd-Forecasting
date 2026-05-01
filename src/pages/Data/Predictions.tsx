@@ -1,22 +1,51 @@
 import { getPrediction } from "@/services/predictions"
-import { useEffect, useState } from "react"
-import ProductSelecter from "@/components/ui/ProductSelecter"
+import { getRowsForTable } from "@/utils/files/DataFilter";
+import { useState } from "react"
+import PredictionInput from "@/components/ui/PredictionInput"
+import type { SalesTableResponse, SaleRow } from "@/types/SalesTypes";
+import SalesTable from "@/components/ui/SalesTable";
+import SalesGraph from "@/components/ui/SalesGraph";
+import { format } from 'date-fns';
+
 export default function Predictions() {
-    const [product, setProduct] = useState("")
-    useEffect(() => {
-        if (!product) return; // evita llamada vacía
+    const [table, setTable] = useState<SalesTableResponse | null>(null)
+    
+    //corregir esto cuando se solucione lo de obtener ventas filtradas.
+    async function fetchTable(identificator: string, prediction: SaleRow) {
+        const rows = await getRowsForTable(null, null, identificator);
+        const predict_table = rows.concat(prediction)
+        setTable({rows: predict_table, columns: ['productName', 'identificator', 'quantity', 'week', 'date']});
+    }
 
-        const fetchData = async () => {
-            const response = await getPrediction(product)
-            console.log(response)
+    async function fetchData(product: [string,string]) {
+        const response = await getPrediction(product[0])
+        const prediction = response.data
+        const forecast_row: SaleRow = {
+            productName: product[1],//si en algun momento el sku no coincide con el nombre del producto es culpa de esta linea.
+            identificator: prediction.product_identifier,
+            week: parseInt(prediction.week),
+            date: format(Date.now(), "yyyy-dd-MM"),
+            quantity: prediction.sales,
+            isPrediction: true
         }
+        fetchTable(product[0], forecast_row)
+    }
 
-        fetchData()
-    }, [product])
+    if (!table) {
+        return (
+            <>
+                <h1>Predictions</h1>
+                <div>Selecciona un producto para ver realizar la prediccion</div>
+                <PredictionInput onSubmit={fetchData}/>
+            </>
+        )
+        
+    }
 
     return (<>
-        <h1>my prediction page</h1>
-        <ProductSelecter onSelect={(value) => setProduct(value)} />
-        <h1>{product}</h1>
+        <h1>Predictions</h1>
+        <PredictionInput onSubmit={fetchData}/>
+        <SalesGraph rows={table.rows} ></SalesGraph>
+        <SalesTable rows={table.rows} cols={table.columns} sort_key={table.columns.find((c) => c == 'week')}  sort_dir={"desc"} ></SalesTable>
     </>)
 }

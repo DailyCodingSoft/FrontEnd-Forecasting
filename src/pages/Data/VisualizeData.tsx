@@ -20,9 +20,9 @@ export default function VisualizeData() {
         }
         fetchData();
     }, [])
-const formatDate = (date: Date) => {
-    return date.toISOString().split('.')[0];
-};
+    const formatDate = (date: Date) => {
+        return date.toISOString().split('.')[0];
+    };
 
    const sendFilters = async (data: dateFilterData, product: Product | null) => {
     const { year, month, day } = data;
@@ -66,6 +66,8 @@ const formatDate = (date: Date) => {
     );
 
     setTable({
+        //cuando se setean los filtros unicamente deberian cambiar las filas de la tabla
+        //no se deberian hardcodear las columnas.
         columns: ['productName', 'identificator', 'quantity', 'week', 'date'],
         rows: rows
     });

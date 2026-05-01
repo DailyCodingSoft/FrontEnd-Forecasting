@@ -1,17 +1,19 @@
 import { useState } from "react";
 import type { Column, SaleRow } from "@/types/SalesTypes";
 
+type SortDirection = "asc" | "desc";
+
 interface SalesTableProps {
   rows: SaleRow[];
   cols: (keyof SaleRow)[];
   title?: string;
+  sort_key?: keyof SaleRow | null;
+  sort_dir?: SortDirection;
 }
 
-type SortDirection = "asc" | "desc";
-
-export default function SalesTable({ rows, cols, title = "Reporte de Ventas" }: SalesTableProps) {
-  const [sortKey, setSortKey] = useState<keyof SaleRow | null>(null);
-  const [sortDir, setSortDir] = useState<SortDirection>("asc");
+export default function SalesTable({ rows, cols, title = "Reporte de Ventas", sort_key = null, sort_dir = "asc" }: SalesTableProps) {
+  const [sortKey, setSortKey] = useState<keyof SaleRow | null>(sort_key);
+  const [sortDir, setSortDir] = useState<SortDirection>(sort_dir);
 
   const columns: Column[] = cols.map(c => ({
       key: c,
@@ -95,8 +97,8 @@ export default function SalesTable({ rows, cols, title = "Reporte de Ventas" }: 
                   key={`${row.identificator}-${row.week}`}
                   className={`
                     transition-colors duration-150
-                    ${isEven ? "bg-white" : "bg-gray-50"}
-                    hover:bg-amber-50
+                    ${row.isPrediction ? "bg-cyan-300" : isEven ? "bg-white" : "bg-gray-50"}
+                    ${row.isPrediction ? "hover:bg-cyan-100" : "hover:bg-amber-50"}
                     ${isLast ? "last:rounded-b-2xl" : "border-b border-gray-100"}
                   `}
                 >
@@ -117,7 +119,8 @@ export default function SalesTable({ rows, cols, title = "Reporte de Ventas" }: 
                     </span>
                   </td>
                   <td className="px-4 py-4 text-center text-sm text-gray-500 font-mono">
-                    {row.date}
+                    {row.date.split("T")[0]}
+                    {/* si las fechas se rompen es culpa de esta linea jaja */}
                   </td>
                 </tr>
               );
