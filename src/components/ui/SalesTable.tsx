@@ -1,6 +1,5 @@
 import { useState } from "react";
 import type { Column, SaleRow } from "@/types/SalesTypes";
-import { format } from 'date-fns';
 
 type SortDirection = "asc" | "desc";
 
