@@ -1,7 +1,16 @@
+import axios from "axios";
 import { api } from "./api";
 
 export async function getSalesTableData():Promise<any> {
-    return await api.get("/sales/");
+    try {
+      return await api.get("/sales/");
+    } catch (error: unknown){
+      if (axios.isAxiosError(error)) {
+        throw (error.message);
+      }else {
+        throw ("unexpected error");
+      }
+    }
 }
 
 export async function insertSalesTableData(data: any[]) {
@@ -19,10 +28,18 @@ export  async function getProducts():Promise<any> {
 }
 
 export async function getSalesTableDataByFilters(from: string|null, to: string|null, product: string|null):Promise<any> {
-    const res = await api.post("sales/grouped", {
-      identificator: product,
-      from: from,
-      to: to
-    })
-    return res.data;
+    try {
+      const res = await api.post("sales/grouped", {
+        identificator: product,
+        from: from,
+        to: to
+      })
+      return res.data;
+    }catch (error: unknown){
+      if (axios.isAxiosError(error)) {
+        throw ("axios error");
+      }else {
+        throw ("unexpected error");
+      }
+    }
 }

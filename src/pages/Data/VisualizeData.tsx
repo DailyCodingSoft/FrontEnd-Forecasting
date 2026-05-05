@@ -1,84 +1,62 @@
 import DateFilter from "@/components/ui/DateFilter";
 import SalesGraph from "@/components/ui/SalesGraph";
 import SalesTable from "@/components/ui/SalesTable";
-import { getSalesTableData } from "@/services/sales";
+import { getSalesTableData, getSalesTableDataByFilters } from "@/services/sales";
 import type { SalesTableResponse } from "@/types/SalesTypes";
 import type { dateFilterData } from "@/types/filtersTypes";
 import type { Product } from "@/types/products";
 import { useEffect, useState } from "react";
-import {getRowsForTable} from "@/utils/files/DataFilter";
+import {getDateRange} from "@/utils/files/DataFilter";
 
 export default function VisualizeData() {
     const [table, setTable] = useState<SalesTableResponse | null>(null)
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await getSalesTableData();
-            console.log(response.data);
-
-            setTable(response.data);
+            try {
+                await getSalesTableData().then((r) => {
+                    setLoading(false);
+                    setTable(r.data);
+                });
+            } catch (error: unknown) {
+                if (error instanceof Error) {
+                    setLoading(false);
+                    setError(error.message)
+                }else {
+                    setLoading(false);
+                    setError(String(error))
+                }
+            }
         }
         fetchData();
     }, [])
-    const formatDate = (date: Date) => {
-        return date.toISOString().split('.')[0];
-    };
 
-   const sendFilters = async (data: dateFilterData, product: Product | null) => {
-    const { year, month, day } = data;
-
-    let from: string | null = null;
-    let to: string | null = null;
-
-    if (year) {
-        const y = parseInt(year);
-
-        if (month) {
-            const m = parseInt(month) - 1;
-
-            if (day) {
-                const d = parseInt(day);
-
-                const date = new Date(y, m, d);
-                from = formatDate(date);
-                to = formatDate(date);
-
-            } else {
-                const start = new Date(y, m, 1);
-                const end = new Date(y, m + 1, 0);
-
-                from = formatDate(start);
-                to = formatDate(end);
+    const sendFilters = async (data: dateFilterData, product: Product | null) => {
+        const [from, to] = getDateRange(data);
+        try {
+            const response = await getSalesTableDataByFilters(from, to, product ? product.identificator : null);
+            setTable({ columns: response.columns, rows: response.rows});
+        }catch (error: unknown) {
+            if (error instanceof Error) {
+                setError(error.message)
+            }else {
+                setError(String(error))
             }
-
-        } else {
-            const start = new Date(y, 0, 1);
-            const end = new Date(y, 11, 31);
-
-            from = formatDate(start);
-            to = formatDate(end);
         }
+    };
+    if (loading) {
+        return (<div>Loading...</div>)
     }
-    const rows = await getRowsForTable(
-        from,
-        to,
-        product ? product.identificator : null
-    );
 
-    setTable({
-        //cuando se setean los filtros unicamente deberian cambiar las filas de la tabla
-        //no se deberian hardcodear las columnas.
-        columns: ['productName', 'identificator', 'quantity', 'week', 'date'],
-        rows: rows
-    });
-};
-
-    if (!table) {
-        return <div>Loading...</div>
-    }
-    return (<>
+    if (table) {
+        return (<>
         <DateFilter onSubmit={sendFilters} ></DateFilter>
         <SalesGraph rows={table.rows} ></SalesGraph>
         <SalesTable rows={table.rows} cols={table.columns} ></SalesTable>
-    </>)
+    </>)   
+    }else {
+        return <div>Error obteniendo la informacion del servidor: {error}</div>
+    }
 }
