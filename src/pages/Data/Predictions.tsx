@@ -1,5 +1,5 @@
 import { getPrediction } from "@/services/predictions"
-import { getRowsForTable } from "@/utils/files/DataFilter";
+import { getSalesTableDataByFilters } from "@/services/sales";
 import { useState } from "react"
 import PredictionInput from "@/components/ui/PredictionInput"
 import type { SalesTableResponse, SaleRow } from "@/types/SalesTypes";
@@ -10,11 +10,10 @@ import { format } from 'date-fns';
 export default function Predictions() {
     const [table, setTable] = useState<SalesTableResponse | null>(null)
     
-    //corregir esto cuando se solucione lo de obtener ventas filtradas.
     async function fetchTable(identificator: string, prediction: SaleRow) {
-        const rows = await getRowsForTable(null, null, identificator);
-        const predict_table = rows.concat(prediction)
-        setTable({rows: predict_table, columns: ['productName', 'identificator', 'quantity', 'week', 'date']});
+        const response = await getSalesTableDataByFilters(null, null, identificator);
+        const predict_table = response.rows.concat(prediction)
+        setTable({rows: predict_table, columns: response.columns});
     }
 
     async function fetchData(product: [string,string]) {
