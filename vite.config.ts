@@ -10,6 +10,7 @@ export default defineConfig({
     babel({ presets: [reactCompilerPreset()] })
   ],
   resolve: {
+    tsconfigPaths: true,
     alias: {
       '@': path.resolve(__dirname, './src'),
     }
