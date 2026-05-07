@@ -1,9 +1,6 @@
-import { useState, useEffect } from 'react';
-import Button from './Button'
+import { useState } from 'react';
 import { getDaysInMonth, getMonth, getWeek } from 'date-fns';
 import type { dateFilterData } from '@/types/filtersTypes';
-import { getProducts } from "@/services/sales";
-import type { Product } from "@/types/products";
 
 const monthDictionary: Record<number, string> = {
     0: "Enero",
@@ -23,7 +20,7 @@ const monthDictionary: Record<number, string> = {
 const currentYear = (new Date().getFullYear()).toString();
 const currentMonth = (new Date().getMonth()).toString();
 
-export default function DateFilter(props: { onSubmit: (data: dateFilterData, product: Product | null) => void }) {
+export default function DateFilter(props: { onSubmit: (data: dateFilterData) => void }) {
     const [year, setYear] = useState<string>();
     const [month, setMonth] = useState<string>();
     const [day, setDay] = useState<string>();
@@ -40,21 +37,6 @@ export default function DateFilter(props: { onSubmit: (data: dateFilterData, pro
     //             currentmonth : ${availableMonths} \n
     //             currentweek : ${currentWeek} \n
     //             currentday : ${availableDays}`)
-    const [products, setProducts] = useState<Product[]>([]);
-    const [selectedProduct, setSelectedProduct] = useState<string>("");
-
-    useEffect(() => {
-        const fetchProducts = async () => {
-            const response = await getProducts();
-            const mapped = response.map((item: any) => ({
-                identificator: item.identificator,
-                productName: item.productName,
-            }));
-            setProducts(mapped);
-        };
-
-        fetchProducts();
-    }, []);
     function onChangeYear(value: string) {
         setYear(value)
         if (value != currentYear) {
@@ -65,22 +47,35 @@ export default function DateFilter(props: { onSubmit: (data: dateFilterData, pro
             setAvailableWeek(Array.from({ length: getWeek(new Date()) + 1 }, (_, i) => 1 + i))
             setAvailableMonths(Array.from({ length: getMonth(new Date()) + 1 }, (_, i) => i))
         }
+        sendData(value, month, day, week)
     }
 
     function onChangeMonth(value: string) {
         setMonth(value)
         if (year)
-        setAvailableDays(Array.from({ length: getDaysInMonth(new Date(parseInt(year), parseInt(value))) }, (_, i) => 1 + i))
+            setAvailableDays(Array.from({ length: getDaysInMonth(new Date(parseInt(year), parseInt(value))) }, (_, i) => 1 + i))
+        sendData(year, value, day, week)
     }
 
-    function sendData() {
-        const selectMonth = month ? parseInt(month) + 1 : "";
-        props.onSubmit({ year: year || "", month: selectMonth.toString(), day: day || "", week: week || "" },  products.find(p => p.identificator === selectedProduct) ?? null);
+    function sendData(
+        customYear = year,
+        customMonth = month,
+        customDay = day,
+        customWeek = week
+    ) {
+        const selectMonth = customMonth
+            ? (parseInt(customMonth) + 1).toString()
+            : ""
+
+        props.onSubmit({
+            year: customYear || "",
+            month: selectMonth,
+            day: customDay || "",
+            week: customWeek || ""
+        })
     }
     const pillSelect = "bg-blue-100 hover:bg-blue-200 text-blue-800 font-medium text-sm rounded-full px-4 py-2 border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer transition-colors duration-150";
-    const handleChange = (value: string) => {
-        setSelectedProduct(value);
-    };
+
 
     return (
         <div className="flex flex-col items-center gap-4 p-6 bg-white rounded-2xl shadow-md w-fit">
@@ -130,7 +125,10 @@ export default function DateFilter(props: { onSubmit: (data: dateFilterData, pro
                     <select
                         name="daySelector"
                         value={day}
-                        onChange={e => setDay(e.target.value)}
+                        onChange={e => {
+                            setDay(e.target.value)
+                            sendData(year, month, e.target.value, week)
+                        }}
                         className={pillSelect}
                     >
 
@@ -142,15 +140,16 @@ export default function DateFilter(props: { onSubmit: (data: dateFilterData, pro
                         ))}
                     </select>
                 </label>
-            </div>
 
-            <div className="flex justify-center">
                 <label className="flex items-center gap-2">
                     <span className="text-sm font-medium text-gray-600">Semana</span>
                     <select
                         name="weekSelector"
                         value={week}
-                        onChange={e => setWeek(e.target.value)}
+                        onChange={e => {
+                            setWeek(e.target.value)
+                            sendData(year, month, day, e.target.value)
+                        }}
                         className={pillSelect}
                     >
 
@@ -162,28 +161,7 @@ export default function DateFilter(props: { onSubmit: (data: dateFilterData, pro
                         ))}
                     </select>
                 </label>
-                <label className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-gray-600">Producto</span>
-                    <select
-                        value={selectedProduct}
-                        onChange={(e) => handleChange(e.target.value)}
-                        className={pillSelect}
-                    >
-
-                        <option value="" disabled>
-                            Seleccionar producto
-                        </option>
-
-                        {products.map((p) => (
-                            <option key={p.identificator} value={p.identificator}>
-                                {p.productName}
-                            </option>
-                        ))}
-                    </select>
-                </label>
             </div>
-
-            <Button label="Filtrar" onClick={sendData} />
         </div>
     );
 }
