@@ -1,10 +1,9 @@
-import DateFilter from "@/components/ui/DateFilter";
+import DateAndProductFilter from "@/components/FilterForms/DateAndProductFilter";
 import SalesGraph from "@/components/ui/SalesGraph";
 import SalesTable from "@/components/ui/SalesTable";
 import { getSalesTableData, getSalesTableDataByFilters } from "@/services/sales";
 import type { SalesTableResponse } from "@/types/SalesTypes";
 import type { dateFilterData } from "@/types/filtersTypes";
-import type { Product } from "@/types/products";
 import { useEffect, useState } from "react";
 import {getDateRange} from "@/utils/files/DataFilter";
 
@@ -33,10 +32,10 @@ export default function VisualizeData() {
         fetchData();
     }, [])
 
-    const sendFilters = async (data: dateFilterData, product: Product | null) => {
+    const sendFilters = async (data: dateFilterData, product: [string, string] | null) => {
         const [from, to] = getDateRange(data);
         try {
-            const response = await getSalesTableDataByFilters(from, to, product ? product.identificator : null);
+            const response = await getSalesTableDataByFilters(from, to, product ? product[0] : null);
             setTable({ columns: response.columns, rows: response.rows});
         }catch (error: unknown) {
             if (error instanceof Error) {
@@ -52,7 +51,7 @@ export default function VisualizeData() {
 
     if (table) {
         return (<>
-        <DateFilter onSubmit={sendFilters} ></DateFilter>
+        <DateAndProductFilter onSubmit={sendFilters} ></DateAndProductFilter>
         <SalesGraph rows={table.rows} ></SalesGraph>
         <SalesTable rows={table.rows} cols={table.columns} ></SalesTable>
     </>)   
