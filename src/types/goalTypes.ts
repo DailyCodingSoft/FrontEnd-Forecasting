@@ -1,0 +1,18 @@
+export interface GoalRequest {
+    name: string;
+    progress: number;
+    categoryCode: string;
+    bonus: number;
+    statusCode: string;
+    quantity: number;
+}
+
+export interface GoalStatus {
+    name: string;
+    code: string;
+}
+
+export interface GoalCategory {
+    name: string;
+    code: string;
+}
