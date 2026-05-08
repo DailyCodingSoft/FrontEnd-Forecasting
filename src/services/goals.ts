@@ -1,6 +1,5 @@
 import type { GoalRequest } from "@/types/goalTypes";
 import { api } from "./api";
-import { goalCategories } from "./TEMP_MOCKS/goalCategories";
 
 export async function saveGoal(data: GoalRequest) {
   const listToSend: GoalRequest[] = [];
@@ -17,6 +16,6 @@ export  async function getGoalStatus():Promise<any> {
 
 //cambiar cuando exista el endpoint obtener categorias.
 export  async function getGoalCategories():Promise<any> {
-    //const res = await api.get("/goals/categories");
-    return goalCategories;
+    const res = await api.get("/goals/categories");
+    return res.data;
 }
