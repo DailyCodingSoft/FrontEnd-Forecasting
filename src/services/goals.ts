@@ -19,3 +19,8 @@ export  async function getGoalCategories():Promise<any> {
     const res = await api.get("/goals/categories");
     return res.data;
 }
+
+export async function getGoalsTableData(status: string): Promise<any> {
+    const res  = await api.get(`/goals/${status}`);  
+    return  res.data;
+}
