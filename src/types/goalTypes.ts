@@ -16,3 +16,7 @@ export interface GoalCategory {
     name: string;
     code: string;
 }
+export interface GoalStatus{
+    name: string;
+    code: string;
+}
