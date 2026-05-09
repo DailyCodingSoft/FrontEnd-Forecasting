@@ -41,7 +41,7 @@ export default function CreateGoal() {
                 progress: 0,
                 categoryCode: category,
                 quantity: parseInt(quantity),
-                statusCode: "3"//active
+                statuscode: "3"//active
             }
             console.log(data);
             const response = await saveGoal(data);
