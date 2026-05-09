@@ -4,9 +4,11 @@ import StatusSelector from "@/components/ui/StatusSelecter"
 import type { GoalRequest } from "@/types/goalTypes"
 import { getGoalsTableData } from "@/services/goals"
 import Button from "@/components/ui/Button"
+import { useNavigate } from "react-router-dom";
+
 
 export default function GoalDashboard() {
-
+    const navigate = useNavigate();
     const [goals, setGoals] = useState<GoalRequest[]>([])
     const [selectedStatus, setSelectedStatus] = useState<string>("active")
 
@@ -30,7 +32,7 @@ export default function GoalDashboard() {
             <div>
                 <h1>Resumen de Desempeño</h1>
                 <p>Revisa tu progreso hacia tus objetivos y descubre cómo puedes mejorar tu desempeño.</p>
-                <Button label="Crear Meta" />
+                <Button label="Crear Meta" onClick={() => navigate("/create/goal")} />
             </div>
             <div>
                 <StatusSelector
