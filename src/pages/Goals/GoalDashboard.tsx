@@ -3,7 +3,7 @@ import GoalCard from "@/components/ui/GoalCard"
 import StatusSelector from "@/components/ui/StatusSelecter"
 import GoalProgressDialog from "@/components/ui/UpdatePorcentegeGoal"
 import type { Goal, GoalRequest } from "@/types/goalTypes"
-import { getGoalCategories, getGoalsTableData, UodateGoal } from "@/services/goals"
+import { getGoalCategories, getGoalsTableData, UpdateGoal } from "@/services/goals"
 import Button from "@/components/ui/Button"
 import { useNavigate } from "react-router-dom";
 
@@ -46,10 +46,10 @@ export default function GoalDashboard() {
             progress: data.progress,
             categoryCode:category ? category.code : "",
             quantity: parseInt(data.quantity.toString().replaceAll(".", "")),
-            statuscode: data.status
+            statusCode: data.status
         }
         console.log(dataUpdate);
-        const response = await UodateGoal(dataUpdate);
+        const response = await UpdateGoal(dataUpdate);
         if (response.status == 200) {
             //mostrar mensaje de confirmacion en el popup.
             navigate('/goals')

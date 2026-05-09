@@ -25,7 +25,7 @@ export async function getGoalsTableData(status: string): Promise<any> {
     return  res.data;
 }
 
-export async function UodateGoal(data: GoalRequest) {
+export async function UpdateGoal(data: GoalRequest) {
     const res = await api.put("/Goals/update", data);
     return res;
 }

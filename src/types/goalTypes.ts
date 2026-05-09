@@ -3,7 +3,7 @@ export interface GoalRequest {
     progress: number;
     categoryCode: string;
     bonus: number;
-    statuscode: string;
+    statusCode: string;
     quantity: number;
 }
 
