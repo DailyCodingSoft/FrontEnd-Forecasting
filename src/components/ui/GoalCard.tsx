@@ -5,7 +5,8 @@ type GoalCardProps = {
     name: string;
     progress: number;
     categorie: string;
-    bonus: number;
+    bonus: number
+    onBonusClick?: () => void;
 }
 
 export default function GoalCard(props: GoalCardProps) {
@@ -52,7 +53,7 @@ export default function GoalCard(props: GoalCardProps) {
                 </Stat.ValueText>
             </Stat.Root>
 
-            <IconButton variant="outline" gridRow="1 / 3" gridColumn="4" alignSelf="center" size="sm" rounded="lg" color="gray.500">
+            <IconButton variant="outline" gridRow="1 / 3" gridColumn="4" alignSelf="center" size="sm" rounded="lg" color="gray.500" onClick={props.onBonusClick}>
                 <LuPencil />
             </IconButton>
 

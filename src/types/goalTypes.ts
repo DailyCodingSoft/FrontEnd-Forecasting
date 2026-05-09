@@ -3,7 +3,16 @@ export interface GoalRequest {
     progress: number;
     categoryCode: string;
     bonus: number;
-    statusCode: string;
+    statuscode: string;
+    quantity: number;
+}
+
+export interface Goal {
+    name: string;
+    progress: number;
+    category: string;
+    bonus: number;
+    status: string;
     quantity: number;
 }
 
