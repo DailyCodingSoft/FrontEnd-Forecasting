@@ -7,6 +7,15 @@ export interface GoalRequest {
     quantity: number;
 }
 
+export interface Goal {
+    name: string;
+    progress: number;
+    category: string;
+    bonus: number;
+    status: string;
+    quantity: number;
+}
+
 export interface GoalStatus {
     name: string;
     code: string;
