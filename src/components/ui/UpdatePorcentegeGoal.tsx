@@ -50,10 +50,8 @@ export default function GoalProgressDialog(props: GoalProgressDialogProps) {
 
         const updatedGoal: Goal = {
             ...props.goal,
-            progress: completed
-                ? 100
-                : addedProgress,
-            status: "1"
+            progress: addedProgress,
+            status: completed ? "1" : "3"
         }
 
         setLoading(true)
@@ -89,9 +87,7 @@ export default function GoalProgressDialog(props: GoalProgressDialogProps) {
 
             const updatedGoal: Goal = {
             ...props.goal,
-            progress: completed
-                ? 100
-                : addedProgress,
+            progress: addedProgress,
             status: "3"
         }
         setLoading(true)
@@ -237,11 +233,12 @@ export default function GoalProgressDialog(props: GoalProgressDialogProps) {
 
                                     <Button
                                         variant="outline"
-                                        onClick={() => {
+                                        onClick={async () => {
                                             setShowCompletedAlert(false)
+                                            await submitGoal(false)
                                         }}
                                     >
-                                        Cerrar
+                                        NO cerrar meta
                                     </Button>
 
                                     <Button
@@ -254,7 +251,7 @@ export default function GoalProgressDialog(props: GoalProgressDialogProps) {
                                             await submitGoal(true)
                                         }}
                                     >
-                                        Continuar
+                                        Cerrar meta
                                     </Button>
 
                                 </HStack>
