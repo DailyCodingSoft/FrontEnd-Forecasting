@@ -1,38 +1,42 @@
 import { IconButton, Tag, Icon, Stat, FormatNumber, Progress, HStack, Grid } from "@chakra-ui/react"
 import { LuPencil, LuDollarSign, LuChartNoAxesCombined } from "react-icons/lu"
+import { useNavigate } from "react-router-dom"
+import type { GoalRequest } from "@/types/goalTypes"
 
 type GoalCardProps = {
     name: string;
     progress: number;
     categorie: string;
     bonus: number;
+    goal: GoalRequest;
 }
 
 export default function GoalCard(props: GoalCardProps) {
+    const navigate = useNavigate()
 
     return (
         <Grid
-           gridTemplateColumns="auto 1fr auto auto auto"
-    gridTemplateRows="auto auto"
-    alignItems="center"
-    columnGap="3"
-    rowGap="1"
-    px="4"
-    py="3"
-    bg="gray.50"
-    borderRadius="2xl"
-    border="1px solid"
-    borderColor="gray.200"
-    shadow="sm"
-    w="full"
-    maxW="full"
+            gridTemplateColumns="auto 1fr auto auto auto"
+            gridTemplateRows="auto auto"
+            alignItems="center"
+            columnGap="3"
+            rowGap="1"
+            px="4"
+            py="3"
+            bg="gray.50"
+            borderRadius="2xl"
+            border="1px solid"
+            borderColor="gray.200"
+            shadow="sm"
+            w="full"
+            maxW="full"
         >
             <Icon size="lg" gridRow="1 / 3" gridColumn="1" alignSelf="center" color="amber.400">
                 <LuChartNoAxesCombined />
             </Icon>
 
             <Progress.Root colorPalette={"green"} value={props.progress} gridRow="1" gridColumn="2" width="full" minW="0">
-                <HStack gap="4"  minW="0">
+                <HStack gap="4" minW="0">
                     <Progress.Label className="font-semibold text-sm truncate">{props.name}</Progress.Label>
                     <Progress.Track flex="1" h="2" borderRadius="full" bg="gray.200">
                         <Progress.Range borderRadius="full" bg="amber.400" />
@@ -52,7 +56,7 @@ export default function GoalCard(props: GoalCardProps) {
                 </Stat.ValueText>
             </Stat.Root>
 
-            <IconButton variant="outline" gridRow="1 / 3" gridColumn="4" alignSelf="center" size="sm" rounded="lg" color="gray.500">
+            <IconButton onClick={() => navigate(`/edit/goal/${encodeURIComponent(props.goal.name)}`, { state: { goal: props.goal } })} variant="outline" gridRow="1 / 3" gridColumn="4" alignSelf="center" size="sm" rounded="lg" color="gray.500">
                 <LuPencil />
             </IconButton>
 

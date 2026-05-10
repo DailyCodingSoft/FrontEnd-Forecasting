@@ -4,6 +4,7 @@ import VisualizeData from "./pages/Data/VisualizeData";
 import Predictions from "./pages/Data/Predictions";
 import GoalDashboard from "./pages/Goals/GoalDashboard";
 import CreateGoal from "./pages/Goals/CreateGoal";
+import EditGoal from "./pages/Goals/EditGoal";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Route path="/predictions" element={<Predictions />} />
       <Route path="/goals" element={<GoalDashboard />} />
       <Route path="/create/goal" element={<CreateGoal />} />
+      <Route path="/edit/goal/:goalName" element={<EditGoal />} />
     </Routes>
   );
 }

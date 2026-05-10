@@ -17,6 +17,7 @@ export default function GoalDashboard() {
         const fetchGoals = async () => {
             try {
                 const response = await getGoalsTableData(selectedStatus)
+                console.log("Goals", response)
                 setGoals(response)
             } catch (error) {
                 console.error("Error fetching goals:", error)
@@ -39,13 +40,15 @@ export default function GoalDashboard() {
                     onSelect={(status) => setSelectedStatus(status[1])}
                 />
             </div>
-            <div  className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-                {goals.map((goal) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+                {goals.map((goal, index) => (
                     <GoalCard
+                        key={index}
                         bonus={goal.bonus}
                         categorie={goal.categoryCode}
                         name={goal.name}
                         progress={goal.progress}
+                        goal={goal}
                     />
                 ))}
             </div>
