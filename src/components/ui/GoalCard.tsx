@@ -1,14 +1,15 @@
 import { IconButton, Tag, Icon, Stat, FormatNumber, Progress, HStack, Grid } from "@chakra-ui/react"
 import { LuPencil, LuDollarSign, LuChartNoAxesCombined } from "react-icons/lu"
 import { useNavigate } from "react-router-dom"
-import type { GoalRequest } from "@/types/goalTypes"
+import type { Goal, GoalRequest } from "@/types/goalTypes"
 
 type GoalCardProps = {
     name: string;
     progress: number;
     categorie: string;
-    bonus: number;
-    goal: GoalRequest;
+    bonus: number
+    goal: Goal | GoalRequest;
+    onBonusClick?: () => void;
 }
 
 export default function GoalCard(props: GoalCardProps) {
@@ -56,7 +57,11 @@ export default function GoalCard(props: GoalCardProps) {
                 </Stat.ValueText>
             </Stat.Root>
 
-            <IconButton onClick={() => navigate(`/edit/goal/${encodeURIComponent(props.goal.name)}`, { state: { goal: props.goal } })} variant="outline" gridRow="1 / 3" gridColumn="4" alignSelf="center" size="sm" rounded="lg" color="gray.500">
+            <IconButton variant="outline" gridRow="1 / 3" gridColumn="4" alignSelf="center" size="sm" rounded="lg" color="gray.500" onClick={props.onBonusClick}>
+                <LuPencil />
+            </IconButton>
+
+            <IconButton onClick={() => navigate(`/edit/goal/${encodeURIComponent(props.goal.name)}`, { state: { goal: props.goal } })} variant="outline" gridRow="1 / 3" gridColumn="4" alignSelf="center" size="sm" rounded="lg" color="red.500">
                 <LuPencil />
             </IconButton>
 

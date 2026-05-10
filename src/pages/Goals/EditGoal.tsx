@@ -216,7 +216,7 @@ export default function EditGoal() {
                             </Button>
 
                             <Button
-                                onClick={() => { navigate('/') }}
+                                onClick={() => { navigate('/goals') }}
                                 variant="outline"
                                 className="h-14 rounded-2xl border border-gray-300 bg-white text-base font-medium text-gray-700 hover:bg-gray-50">
                                 <LuX />
