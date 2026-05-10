@@ -1,8 +1,8 @@
 import { NumberInput, Input, Field, InputGroup, Select, Button, Text, VStack, Flex, Box, HStack, Center, createListCollection } from "@chakra-ui/react"
 import { formatNumberToCurrency } from "@/utils/helpers";
 import { useEffect, useState } from "react";
-import { getGoalCategories, saveGoal, getGoalByName, updateGoal } from "@/services/goals";
-import type { GoalCategory, GoalRequest, UpdateGoalRequest } from "@/types/goalTypes";
+import { getGoalCategories, getGoalByName, updateGoal } from "@/services/goals";
+import type { GoalCategory, UpdateGoalRequest } from "@/types/goalTypes";
 import { LuSave, LuX, LuGoal } from "react-icons/lu";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Spinner } from "@chakra-ui/react";
@@ -37,7 +37,7 @@ export default function EditGoal() {
                 setBonus(formatNumberToCurrency(goal.bonus.toString()));
 
                 const selected = result.find(
-                    c => c.name === goal.category
+                    (c: GoalCategory) => c.name === goal.category
                 );
 
                 setCategory(selected?.code || "");
