@@ -20,6 +20,7 @@ export default function GoalDashboard() {
         const fetchGoals = async () => {
             try {
                 const response = await getGoalsTableData(selectedStatus)
+                console.log("Goals", response)
                 setGoals(response)
             } catch (error) {
                 console.error("Error fetching goals:", error)
@@ -44,7 +45,7 @@ export default function GoalDashboard() {
             name: data.name,
             bonus: parseInt(data.bonus.toString().replaceAll(".", "")),
             progress: data.progress,
-            categoryCode:category ? category.code : "",
+            categoryCode: category ? category.code : "",
             quantity: parseInt(data.quantity.toString().replaceAll(".", "")),
             statusCode: data.status
         }
@@ -58,39 +59,41 @@ export default function GoalDashboard() {
         }
     }
 
-return (
-    <>
-        <div>
-            <h1>Resumen de Desempeño</h1>
-            <p>Revisa tu progreso hacia tus objetivos y descubre cómo puedes mejorar tu desempeño.</p>
-            <Button label="Crear Meta" onClick={() => navigate("/create/goal")} />
-        </div>
-        <div>
-            <StatusSelector
-                onSelect={(status) => setSelectedStatus(status[1])}
-            />
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-            {goals.map((goal) => (
-                <GoalCard
-                    bonus={goal.bonus}
-                    categorie={goal.category}
-                    name={goal.name}
-                    progress={goal.progress}
-                    onBonusClick={() => {
-                        handleOpenDialog(goal)
-                    }}
+    return (
+        <>
+            <div>
+                <h1>Resumen de Desempeño</h1>
+                <p>Revisa tu progreso hacia tus objetivos y descubre cómo puedes mejorar tu desempeño.</p>
+                <Button label="Crear Meta" onClick={() => navigate("/create/goal")} />
+            </div>
+            <div>
+                <StatusSelector
+                    onSelect={(status) => setSelectedStatus(status[1])}
                 />
-            ))}
-        </div>
-        <GoalProgressDialog
-            open={open}
-            onClose={() => setOpen(false)}
-            goal={selectedGoal as Goal}
-            onSubmit={async (data) => {
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+                {goals.map((goal, index) => (
+                    <GoalCard
+                        key={index}
+                        bonus={goal.bonus}
+                        categorie={goal.category}
+                        name={goal.name}
+                        progress={goal.progress}
+                        goal={goal}
+                        onBonusClick={() => {
+                            handleOpenDialog(goal)
+                        }}
+                    />
+                ))}
+            </div>
+            <GoalProgressDialog
+                open={open}
+                onClose={() => setOpen(false)}
+                goal={selectedGoal as Goal}
+                onSubmit={async (data) => {
                     await handleUpdateProgress(data)
-            }}
-        />
-    </>
-)
+                }}
+            />
+        </>
+    )
 }
