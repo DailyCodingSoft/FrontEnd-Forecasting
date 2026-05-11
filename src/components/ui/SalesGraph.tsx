@@ -64,6 +64,20 @@ export default function SalesChart({
     const [selectedProducts, setSelectedProducts] = useState<Set<string>>(
         new Set(allProducts)
     );
+
+    useEffect(() => {
+        setSelectedProducts((prev) => {
+            const next = new Set(prev);
+            let changed = false;
+            allProducts.forEach(p => {
+                if (!next.has(p)) {
+                    next.add(p);
+                    changed = true;
+                }
+            });
+            return changed ? next : prev;
+        });
+    }, [allProducts]);
     const [timeRange, setTimeRange] = useState<TimeRange>("MAX");
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -123,21 +137,38 @@ export default function SalesChart({
             .map((product) => {
                 const colorIdx = allProducts.indexOf(product);
                 const color = getColor(colorIdx);
+                const pointBackgroundColors: string[] = [];
+                const pointBorderColors: string[] = [];
+                const pointRadii: number[] = [];
+
                 const data = weeks.map((week) => {
                     const match = filteredRows.find(
                         (r) => r.productName === product && r.week === week
                     );
+
+                    if (match?.isPrediction) {
+                        pointBackgroundColors.push("#eab308"); // yellow-500
+                        pointBorderColors.push("#ca8a04"); // yellow-600
+                        pointRadii.push(6);
+                    } else {
+                        pointBackgroundColors.push(color);
+                        pointBorderColors.push(color);
+                        pointRadii.push(weeks.length > 20 ? 2 : 4);
+                    }
+
                     return match ? match.quantity : null;
                 });
+
                 return {
                     label: product,
                     data,
                     borderColor: color,
                     backgroundColor: color + "15",
                     borderWidth: 2,
-                    pointRadius: weeks.length > 20 ? 2 : 4,
-                    pointHoverRadius: 6,
-                    pointBackgroundColor: color,
+                    pointRadius: pointRadii,
+                    pointHoverRadius: 8,
+                    pointBackgroundColor: pointBackgroundColors,
+                    pointBorderColor: pointBorderColors,
                     tension: 0.4,
                     fill: false,
                     spanGaps: true,
