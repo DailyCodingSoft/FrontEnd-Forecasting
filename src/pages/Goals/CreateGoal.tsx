@@ -20,7 +20,7 @@ export default function CreateGoal() {
             setCategories(result)
         }
         fetchCategories()
-    });
+    }, []);
 
     function applyFormatToNumber(value:string) {
         const formatNumber = value.replaceAll('.','');
