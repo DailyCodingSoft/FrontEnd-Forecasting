@@ -6,6 +6,7 @@ import type { SaleRow } from "@/types/SalesTypes";
 interface SalesChartProps {
     rows: SaleRow[];
     title?: string;
+    simplified?: boolean;
 }
 
 type TimeRange = "1M" | "Q1" | "Q2" | "1Y" | "MAX";
@@ -50,6 +51,7 @@ function filterByWeeks(rows: SaleRow[], range: TimeRange): SaleRow[] {
 export default function SalesChart({
     rows,
     title = "Total de Ventas",
+    simplified = false,
 }: SalesChartProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -109,8 +111,8 @@ export default function SalesChart({
     const clearAll = () => setSelectedProducts(new Set([allProducts[0]]));
 
     const filteredRows = useMemo(
-        () => filterByWeeks(rows, timeRange),
-        [rows, timeRange]
+        () => filterByWeeks(rows, simplified ? "MAX" : timeRange),
+        [rows, timeRange, simplified]
     );
 
     const weeks = useMemo(
@@ -291,7 +293,7 @@ export default function SalesChart({
                 </div>
 
                 {/* Dropdown selector de productos */}
-                <div className="relative flex-shrink-0" ref={dropdownRef}>
+                {!simplified && <div className="relative flex-shrink-0" ref={dropdownRef}>
                     <button
                         onClick={() => setDropdownOpen((o) => !o)}
                         className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-xl shadow-sm hover:border-gray-300 transition-colors cursor-pointer"
@@ -373,11 +375,11 @@ export default function SalesChart({
                             </div>
                         </div>
                     )}
-                </div>
+                </div>}
             </div>
 
             {/* Filtro de tiempo estilo Google Finance */}
-            <div className="flex items-center gap-0.5 mb-3 px-1">
+            {!simplified && <div className="flex items-center gap-0.5 mb-3 px-1">
                 {TIME_RANGES.map(({ label, value }) => {
                     const weeksNeeded = WEEKS_BY_RANGE[value];
                     const disabled =
@@ -403,7 +405,7 @@ export default function SalesChart({
                 <span className="ml-auto text-xs text-gray-400 tabular-nums">
                     S{weeks[0]} – S{weeks[weeks.length - 1]}
                 </span>
-            </div>
+            </div>}
 
             {/* Chart */}
             <div className="rounded-2xl overflow-hidden shadow-sm border border-gray-100 bg-white px-4 pt-4 pb-2 mb-3">
@@ -422,7 +424,18 @@ export default function SalesChart({
                     .filter((p) => selectedProducts.has(p))
                     .map((product) => {
                         const color = getColor(allProducts.indexOf(product));
-                        return (
+                        return simplified ? (
+                            <span
+                                key={product}
+                                className="flex items-center gap-1.5 text-xs text-gray-500"
+                            >
+                                <span
+                                    className="inline-block w-4 rounded-full flex-shrink-0"
+                                    style={{ height: "2px", backgroundColor: color }}
+                                />
+                                {product}
+                            </span>
+                        ) : (
                             <button
                                 key={product}
                                 onClick={() => toggleProduct(product)}
