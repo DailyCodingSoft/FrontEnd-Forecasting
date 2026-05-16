@@ -16,7 +16,7 @@ function App() {
       <Route path="/goals" element={<GoalDashboard />} />
       <Route path="/create/goal" element={<CreateGoal />} />
       <Route path="/edit/goal/:goalName" element={<EditGoal />} />
-      <Route path="/goals/discount" element={<Discount />} />
+      <Route path="/goals/discount/:goalName" element={<Discount />} />
     </Routes>
   );
 }
