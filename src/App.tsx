@@ -5,6 +5,7 @@ import Predictions from "./pages/Data/Predictions";
 import GoalDashboard from "./pages/Goals/GoalDashboard";
 import CreateGoal from "./pages/Goals/CreateGoal";
 import EditGoal from "./pages/Goals/EditGoal";
+import Discount from "./pages/Goals/Discount";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Route path="/goals" element={<GoalDashboard />} />
       <Route path="/create/goal" element={<CreateGoal />} />
       <Route path="/edit/goal/:goalName" element={<EditGoal />} />
+      <Route path="/goals/discount/:goalName" element={<Discount />} />
     </Routes>
   );
 }

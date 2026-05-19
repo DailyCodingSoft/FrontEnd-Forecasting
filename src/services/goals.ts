@@ -49,3 +49,9 @@ export async function updateGoal(data: UpdateGoalRequest) {
         throw new Error(message);
     }
 }
+
+export async function generateSuggestedDiscounts(goalName: string): Promise<any> {
+    return await api.post(`/goals/generate-suggested-discounts`, goalName, {
+        headers: { "Content-Type": "application/json" },
+    });
+}

@@ -22,8 +22,10 @@ export async function insertSalesTableData(data: any[]) {
 
 }
 
-export  async function getProducts():Promise<any> {
-    const res = await api.get("/product");
+export  async function getProducts(categoryCode?: string):Promise<any> {
+    const res = await api.get("/product", {
+        params: categoryCode ? { category: categoryCode } : {},
+    });
     return res.data;
 }
 
