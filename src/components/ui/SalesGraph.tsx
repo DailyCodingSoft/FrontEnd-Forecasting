@@ -9,6 +9,7 @@ import {
     CHART_TOOLTIP,
     CHART_GRID,
     CHART_TICK_COLOR,
+    SWATCH_INACTIVE_COLOR,
 } from "@/theme/chartColors";
 
 interface SalesChartProps {
@@ -344,7 +345,7 @@ export default function SalesChart({
                                             {/* Swatch de color */}
                                             <span
                                                 className="flex-shrink-0 w-2.5 h-2.5 rounded-sm transition-colors"
-                                                style={{ backgroundColor: active ? color : "#d1d5db" }}
+                                                style={{ backgroundColor: active ? color : SWATCH_INACTIVE_COLOR }}
                                             />
                                             <span
                                                 className={`flex-1 truncate text-sm transition-colors ${active ? "text-gray-800 font-medium" : "text-gray-400"

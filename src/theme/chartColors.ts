@@ -25,3 +25,5 @@ export const CHART_GRID = {
 }
 
 export const CHART_TICK_COLOR = "#9ca3af"
+
+export const SWATCH_INACTIVE_COLOR = "#d1d5db"
