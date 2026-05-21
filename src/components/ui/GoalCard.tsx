@@ -65,7 +65,7 @@ export default function GoalCard(props: GoalCardProps) {
                 <LuPencil />
             </IconButton>
 
-            <IconButton variant="outline" gridRow="1 / 3" gridColumn="5" alignSelf="center" size="sm" rounded="lg" color="gray.500">
+            <IconButton onClick={() => navigate(`/goals/discount/${encodeURIComponent(props.goal.name)}`, { state: { goal: props.goal } })} variant="outline" gridRow="1 / 3" gridColumn="5" alignSelf="center" size="sm" rounded="lg" color="gray.500">
                 <LuDollarSign />
             </IconButton>
         </Grid>
