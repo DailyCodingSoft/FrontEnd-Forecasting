@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { Box, Spinner, Flex } from "@chakra-ui/react";
 import { format } from "date-fns";
+import GoalSummaryCard from "@/components/ui/GoalSummaryCard"
 
 import SuggestedDiscountModule from "@/components/ui/SuggestedDiscountModule";
 import DiscountPredictions from "@/components/ui/DiscountPredictions";
@@ -12,7 +13,7 @@ import { getProducts, getSalesTableDataByFilters } from "@/services/sales";
 import { getPrediction } from "@/services/predictions";
 
 import type { SaleRow } from "@/types/SalesTypes";
-import type { GoalCategory } from "@/types/goalTypes";
+import type { Goal, GoalCategory } from "@/types/goalTypes";
 import type { Product } from "@/types/products";
 
 export interface SuggestedDiscount {
@@ -34,7 +35,7 @@ export interface ProductDiscount {
 
 export default function Discount() {
     const { goalName } = useParams<{ goalName: string }>();
-
+    const [goal, setGoal] = useState<Goal | null>(null);
     // ─── Descuentos sugeridos ───────────────────────────────────────────────
     const [discounts, setDiscounts] = useState<SuggestedDiscount[]>([]);
     const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
@@ -105,11 +106,10 @@ export default function Discount() {
                     getGoalByName(name),
                     getGoalCategories(),
                 ]);
-
+                setGoal(goal);
                 const categoryCode = categories.find(
                     (c: GoalCategory) => c.name === goal.category
                 )?.code;
-
                 if (!categoryCode) return;
 
                 const products: Product[] = await getProducts(categoryCode);
@@ -122,6 +122,11 @@ export default function Discount() {
                         ]);
 
                         const prediction = predictionRes.data;
+
+                        if (!prediction) {
+                            return [];
+                        }
+
                         const forecastRow: SaleRow = {
                             productName: product.productName,
                             identificator: prediction.product_identifier,
@@ -148,18 +153,24 @@ export default function Discount() {
 
     // ─── Render ─────────────────────────────────────────────────────────────
     return (
-        <Flex direction="column" gap={8} p={6}>
+        <Flex direction="column" gap={6} p={6}>
+            {goal && (
+                <GoalSummaryCard goal={goal} />
+            )}
             {/* Módulo principal — Descuentos sugeridos */}
-            <SuggestedDiscountModule
+            {/* <SuggestedDiscountModule
                 products={products}
                 selectedProductId={selectedProductId}
                 selectedProduct={selectedProduct}
                 onProductChange={setSelectedProductId}
                 isLoading={isLoadingDiscounts}
                 error={discountError}
-            />
+            /> */}
 
             {/* Módulo secundario — Predicciones */}
+
+
+
             {isLoadingPredictions ? (
                 <Box display="flex" justifyContent="center" py={10}>
                     <Spinner />
