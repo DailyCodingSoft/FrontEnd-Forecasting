@@ -1,5 +1,6 @@
 // components/file/FileUploader.tsx
 import { useState, useEffect } from "react";
+import { Box, Text } from "@chakra-ui/react";
 import parseFile from "@/utils/files/importer_datos";
 
 type FileItem = {
@@ -12,6 +13,12 @@ type Props = {
   onDataParsed: (data: any[]) => void;
   resetTrigger: number;
   onError: (hasError: boolean) => void;
+};
+
+const PROGRESS_BAR_COLOR: Record<FileItem["status"], string> = {
+  uploading: "success.300",
+  success: "success.500",
+  error: "danger.500",
 };
 
 const FileUploader = ({ onDataParsed, resetTrigger, onError }: Props) => {
@@ -47,7 +54,7 @@ const FileUploader = ({ onDataParsed, resetTrigger, onError }: Props) => {
   };
 
   // 🖱️ Drag & Drop
-  const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
+  const handleDrop = (e: React.DragEvent<HTMLElement>) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
@@ -58,7 +65,7 @@ const FileUploader = ({ onDataParsed, resetTrigger, onError }: Props) => {
     processFiles(droppedFiles);
   };
 
-  const handleDragOver = (e: React.DragEvent<HTMLLabelElement>) => {
+  const handleDragOver = (e: React.DragEvent<HTMLElement>) => {
     e.preventDefault(); // 🔥 necesario
     setIsDragging(true);
   };
@@ -116,9 +123,15 @@ const FileUploader = ({ onDataParsed, resetTrigger, onError }: Props) => {
     <div className="flex flex-col md:flex-row gap-6 items-center">
 
       {/* Dropzone */}
-      <label
-        className={`w-[500px] h-[250px] border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition
-          ${isDragging ? "border-blue-500 bg-blue-50" : "border-black"}`}
+      <Box
+        as="label"
+        className="flex flex-col items-center justify-center cursor-pointer transition"
+        w="500px"
+        h="250px"
+        borderWidth="2px"
+        borderStyle="dashed"
+        borderColor={isDragging ? "info.500" : "black"}
+        bg={isDragging ? "info.50" : "transparent"}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -131,30 +144,26 @@ const FileUploader = ({ onDataParsed, resetTrigger, onError }: Props) => {
           onChange={handleFiles}
         />
 
-        <p className="font-semibold">
-          ARRASTRA O SELECCIONA UN ARCHIVO
-        </p>
-      </label>
+        <Text fontWeight="semibold">ARRASTRA O SELECCIONA UN ARCHIVO</Text>
+      </Box>
 
       {/* Lista de archivos */}
       <div className="flex flex-col gap-4">
         {files.map((item, i) => (
-          <div key={i} className="w-full md:w-[300px]">
+          <Box key={i} className="w-full md:w-[300px]">
 
-            <p className="text-sm font-medium">{item.file.name}</p>
+            <Text fontSize="sm" fontWeight="medium">{item.file.name}</Text>
 
-            <div className="w-full h-3 bg-gray-200 rounded mt-1">
-              <div
-                className={`h-3 rounded transition-all ${item.status === "error"
-                  ? "bg-red-500"
-                  : item.status === "success"
-                    ? "bg-green-500"
-                    : "bg-green-300"
-                  }`}
-                style={{ width: `${item.progress}%` }}
+            <Box w="100%" h="3" bg="gray.200" borderRadius="sm" mt={1}>
+              <Box
+                className="transition-all"
+                h="3"
+                borderRadius="sm"
+                bg={PROGRESS_BAR_COLOR[item.status]}
+                width={`${item.progress}%`}
               />
-            </div>
-          </div>
+            </Box>
+          </Box>
         ))}
       </div>
     </div>
