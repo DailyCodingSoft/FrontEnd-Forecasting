@@ -1,24 +1,27 @@
-// components/ui/Button.tsx
+import { Button as ChakraButton } from "@chakra-ui/react";
+
 type ButtonProps = {
   label: string;
   onClick?: () => void;
   variant?: "primary" | "danger" | "success";
 };
 
-const styles = {
-  primary: "bg-blue-500 hover:bg-blue-600",
-  danger: "bg-red-500 hover:bg-red-600",
-  success: "bg-green-500 hover:bg-green-600",
+const colorPaletteMap: Record<NonNullable<ButtonProps["variant"]>, string> = {
+  primary: "blue",
+  danger: "red",
+  success: "green",
 };
 
 const Button = ({ label, onClick, variant = "primary" }: ButtonProps) => {
   return (
-    <button
+    <ChakraButton
       onClick={onClick}
-      className={`px-6 py-2 rounded-full text-white ${styles[variant]}`}
+      colorPalette={colorPaletteMap[variant]}
+      borderRadius="full"
+      px="6"
     >
       {label}
-    </button>
+    </ChakraButton>
   );
 };
 

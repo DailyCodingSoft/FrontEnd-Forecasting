@@ -1,13 +1,15 @@
 // components/ui/Title.tsx
+import { Heading } from "@chakra-ui/react";
+
 type TitleProps = {
   text: string;
 };
 
 const Title = ({ text }: TitleProps) => {
   return (
-    <h1 className="text-2xl font-bold mb-6">
+    <Heading as="h1" fontSize="2xl" fontWeight="bold" mb={6}>
       {text}
-    </h1>
+    </Heading>
   );
 };
 

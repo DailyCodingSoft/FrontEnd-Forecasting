@@ -1,6 +1,9 @@
 import { useState } from 'react';
+import { Text } from '@chakra-ui/react';
 import { getDaysInMonth, getMonth, getWeek } from 'date-fns';
 import type { dateFilterData } from '@/types/filtersTypes';
+import PillSelect from '@/components/ui/PillSelect';
+import FilterCard from '@/components/ui/FilterCard';
 
 const monthDictionary: Record<number, string> = {
     0: "Enero",
@@ -74,94 +77,79 @@ export default function DateFilter(props: { onSubmit: (data: dateFilterData) => 
             week: customWeek || ""
         })
     }
-    const pillSelect = "bg-blue-100 hover:bg-blue-200 text-blue-800 font-medium text-sm rounded-full px-4 py-2 border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer transition-colors duration-150";
-
-
     return (
-        <div className="flex flex-col items-center gap-4 p-6 bg-white rounded-2xl shadow-md w-fit">
-            <h2 className="text-sm font-semibold tracking-widest text-gray-500 uppercase">
-                Filtro por Fecha
-            </h2>
-
+        <FilterCard title="Filtro por Fecha">
             <div className="flex flex-wrap justify-center gap-3">
                 <label className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-gray-600">Año</span>
-                    <select
+                    <Text fontSize="sm" fontWeight="medium" color="gray.600">Año</Text>
+                    <PillSelect
                         name="year_selector"
                         value={year}
                         onChange={e => onChangeYear(e.target.value)}
-                        className={pillSelect}
                     >
-
                         <option value="">
                             Seleccionar
                         </option>
                         {availableYears.map((y) => (
                             <option key={y} value={y}>{y}</option>
                         ))}
-                    </select>
+                    </PillSelect>
                 </label>
 
                 <label className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-gray-600">Mes</span>
-                    <select
+                    <Text fontSize="sm" fontWeight="medium" color="gray.600">Mes</Text>
+                    <PillSelect
                         name="monthSelector"
                         value={month}
                         onChange={e => onChangeMonth(e.target.value)}
-                        className={pillSelect}
                     >
-
                         <option value="">
                             Seleccionar
                         </option>
                         {availableMonths.map((n) => (
                             <option key={n} value={n}>{monthDictionary[n]}</option>
                         ))}
-                    </select>
+                    </PillSelect>
                 </label>
 
                 <label className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-gray-600">Día</span>
-                    <select
+                    <Text fontSize="sm" fontWeight="medium" color="gray.600">Día</Text>
+                    <PillSelect
                         name="daySelector"
                         value={day}
                         onChange={e => {
                             setDay(e.target.value)
                             sendData(year, month, e.target.value, week)
                         }}
-                        className={pillSelect}
                     >
-
                         <option value="">
                             Seleccionar
                         </option>
                         {availableDays.map((d) => (
                             <option key={d} value={String(d)}>{d}</option>
                         ))}
-                    </select>
+                    </PillSelect>
                 </label>
 
                 <label className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-gray-600">Semana</span>
-                    <select
+                    <Text fontSize="sm" fontWeight="medium" color="gray.600">Semana</Text>
+                    <PillSelect
                         name="weekSelector"
                         value={week}
                         onChange={e => {
                             setWeek(e.target.value)
                             sendData(year, month, day, e.target.value)
                         }}
-                        className={pillSelect}
                     >
-
                         <option value="">
                             Seleccionar
                         </option>
                         {availableWeek.map((w) => (
                             <option key={w} value={w}>{w}</option>
                         ))}
-                    </select>
+                    </PillSelect>
                 </label>
             </div>
-        </div>
+        </FilterCard>
     );
 }
