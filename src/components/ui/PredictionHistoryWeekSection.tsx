@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Table, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading, Table } from "@chakra-ui/react";
 import type { WeekGroup } from "@/types/predictionHistoryTypes";
 import CategoryTag from "@/components/ui/CategoryTag";
 import WeekStatusTag from "@/components/ui/WeekStatusTag";
@@ -13,26 +13,21 @@ type Props = {
 const COLUMNS = ["Producto", "Código", "Cantidad", "Fecha generada", "Categoría"] as const;
 
 export default function PredictionHistoryWeekSection({ group }: Props) {
-  const { startDate, endDate, status, predictions } = group;
+  const { status, predictions } = group;
 
   return (
     <Box w="full" bg="white" borderRadius="2xl" boxShadow="md" p={6}>
       <Flex align="center" justify="space-between" mb={4} gap={4} wrap="wrap">
         <Flex align="center" gap={3} wrap="wrap">
-          <Box>
-            <Heading
-              as="h2"
-              fontSize="lg"
-              fontWeight="bold"
-              color="gray.800"
-              letterSpacing="tight"
-            >
-              {formatWeekShortLabel(group)}
-            </Heading>
-            <Text fontSize="xs" color="gray.500" mt="0.5" fontFamily="mono">
-              {`${startDate} al ${endDate}`}
-            </Text>
-          </Box>
+          <Heading
+            as="h2"
+            fontSize="lg"
+            fontWeight="bold"
+            color="gray.800"
+            letterSpacing="tight"
+          >
+            {formatWeekShortLabel(group)}
+          </Heading>
           <WeekStatusTag status={status} />
         </Flex>
         <MetaLabel>{`${predictions.length} predicciones`}</MetaLabel>
