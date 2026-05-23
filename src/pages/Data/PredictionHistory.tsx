@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 import FilterCard from "@/components/ui/FilterCard";
 import PillSelect from "@/components/ui/PillSelect";
-import Button from "@/components/ui/Button";
 import PredictionHistoryWeekSection from "@/components/ui/PredictionHistoryWeekSection";
 import SectionDivider from "@/components/ui/SectionDivider";
 import { getPredictionHistory } from "@/services/predictions";
@@ -62,26 +61,23 @@ export default function PredictionHistory() {
         </Text>
       </Flex>
 
-      <Flex align="center" gap={4} wrap="wrap">
-        <FilterCard title="Semana">
-          <PillSelect
-            value={selectedWeekKey}
-            onChange={(e) => setSelectedWeekKey(e.target.value)}
-            disabled={fetchState.status !== "ready"}
-          >
-            <option value={ALL_WEEKS}>Todas las semanas</option>
-            {allOptions.map((g) => {
-              const key = buildWeekKey(g);
-              return (
-                <option key={key} value={key}>
-                  {formatWeekShortLabel(g)}
-                </option>
-              );
-            })}
-          </PillSelect>
-        </FilterCard>
-        <Button label="Filtrar" />
-      </Flex>
+      <FilterCard title="Semana">
+        <PillSelect
+          value={selectedWeekKey}
+          onChange={(e) => setSelectedWeekKey(e.target.value)}
+          disabled={fetchState.status !== "ready"}
+        >
+          <option value={ALL_WEEKS}>Todas las semanas</option>
+          {allOptions.map((g) => {
+            const key = buildWeekKey(g);
+            return (
+              <option key={key} value={key}>
+                {formatWeekShortLabel(g)}
+              </option>
+            );
+          })}
+        </PillSelect>
+      </FilterCard>
 
       {fetchState.status === "loading" && (
         <StatusCard>Cargando historial…</StatusCard>
