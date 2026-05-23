@@ -9,8 +9,8 @@ export interface PredictionHistoryEntry {
 export interface WeekGroup {
   year: number;
   week: number;
-  startDate: string;
-  endDate: string;
   status: "current" | "finalized";
   predictions: PredictionHistoryEntry[];
 }
+
+export type PredictionHistoryResponse = Record<string, PredictionHistoryEntry[]>;
