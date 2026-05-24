@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { getProducts } from "@/services/sales";
+import PillSelect from "@/components/ui/PillSelect";
+import FilterCard from "@/components/ui/FilterCard";
 
 type Product = {
   identificator: string;
@@ -13,7 +15,6 @@ type Props = {
 export default function ProductSelector( { onSelect }: Props ) {
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<string>("");
-  const pillSelect = "bg-blue-100 hover:bg-blue-200 text-blue-800 font-medium text-sm rounded-full px-4 py-2 border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer transition-colors duration-150";
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -34,15 +35,10 @@ export default function ProductSelector( { onSelect }: Props ) {
   };
 
   return (
-    <div className="flex flex-col items-center gap-4 p-6 bg-white rounded-2xl shadow-md w-fit">
-      <h2 className="text-sm font-semibold tracking-widest text-gray-500 uppercase">
-        Seleccionar Producto
-      </h2>
-
-      <select
+    <FilterCard title="Seleccionar Producto">
+      <PillSelect
         value={selectedProduct}
         onChange={(e) => handleChange([e.target.value, products[e.target.selectedIndex-1].productName])}
-        className={pillSelect}
       >
         <option value="">-- Selecciona --</option>
 
@@ -51,7 +47,7 @@ export default function ProductSelector( { onSelect }: Props ) {
             {p.productName}
           </option>
         ))}
-      </select>
-    </div>
+      </PillSelect>
+    </FilterCard>
   );
 }

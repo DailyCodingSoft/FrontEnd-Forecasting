@@ -2,6 +2,15 @@
 
 import { useEffect, useRef, useMemo, useState } from "react";
 import type { SaleRow } from "@/types/SalesTypes";
+import {
+    getChartColor,
+    PREDICTION_COLOR,
+    PREDICTION_BORDER_COLOR,
+    CHART_TOOLTIP,
+    CHART_GRID,
+    CHART_TICK_COLOR,
+    SWATCH_INACTIVE_COLOR,
+} from "@/theme/chartColors";
 
 interface SalesChartProps {
     rows: SaleRow[];
@@ -11,7 +20,6 @@ interface SalesChartProps {
 
 type TimeRange = "1M" | "Q1" | "Q2" | "1Y" | "MAX";
 
-// Semanas por rango — basado en semanas reales, no fechas
 const WEEKS_BY_RANGE: Record<TimeRange, number | null> = {
     "1M": 4,
     Q1: 13,
@@ -27,18 +35,6 @@ const TIME_RANGES: { label: string; value: TimeRange }[] = [
     { label: "1A", value: "1Y" },
     { label: "Máx", value: "MAX" },
 ];
-
-// Paleta ampliada para soportar muchos productos
-const COLORS = [
-    "#1d4ed8", "#dc2626", "#16a34a", "#d97706", "#7c3aed",
-    "#0891b2", "#be185d", "#059669", "#ea580c", "#6366f1",
-    "#84cc16", "#f43f5e", "#14b8a6", "#a855f7", "#fb923c",
-    "#0ea5e9", "#10b981", "#e11d48", "#8b5cf6", "#22c55e",
-];
-
-function getColor(idx: number): string {
-    return COLORS[idx % COLORS.length];
-}
 
 function filterByWeeks(rows: SaleRow[], range: TimeRange): SaleRow[] {
     const limit = WEEKS_BY_RANGE[range];
@@ -138,7 +134,7 @@ export default function SalesChart({
             .filter((p) => selectedProducts.has(p))
             .map((product) => {
                 const colorIdx = allProducts.indexOf(product);
-                const color = getColor(colorIdx);
+                const color = getChartColor(colorIdx);
                 const pointBackgroundColors: string[] = [];
                 const pointBorderColors: string[] = [];
                 const pointRadii: number[] = [];
@@ -149,8 +145,8 @@ export default function SalesChart({
                     );
 
                     if (match?.isPrediction) {
-                        pointBackgroundColors.push("#eab308"); // yellow-500
-                        pointBorderColors.push("#ca8a04"); // yellow-600
+                        pointBackgroundColors.push(PREDICTION_COLOR);
+                        pointBorderColors.push(PREDICTION_BORDER_COLOR);
                         pointRadii.push(6);
                     } else {
                         pointBackgroundColors.push(color);
@@ -214,10 +210,7 @@ export default function SalesChart({
                     plugins: {
                         legend: { display: false },
                         tooltip: {
-                            backgroundColor: "#1f2937",
-                            titleColor: "#f9fafb",
-                            bodyColor: "#d1d5db",
-                            borderColor: "#374151",
+                            ...CHART_TOOLTIP,
                             borderWidth: 1,
                             padding: 12,
                             callbacks: {
@@ -233,11 +226,11 @@ export default function SalesChart({
                     },
                     scales: {
                         x: {
-                            grid: { color: "#f9fafb" },
+                            grid: { color: CHART_GRID.x },
                             border: { dash: [4, 4] },
                             ticks: {
                                 font: { size: 11 },
-                                color: "#9ca3af",
+                                color: CHART_TICK_COLOR,
                                 maxRotation: 0,
                                 callback: (_val, index) =>
                                     index % tickStep === 0 ? xLabels[index] : "",
@@ -245,10 +238,10 @@ export default function SalesChart({
                         },
                         y: {
                             beginAtZero: true,
-                            grid: { color: "#f3f4f6" },
+                            grid: { color: CHART_GRID.y },
                             ticks: {
                                 font: { size: 11 },
-                                color: "#9ca3af",
+                                color: CHART_TICK_COLOR,
                                 callback: (v) => Number(v).toLocaleString("es-CO"),
                             },
                         },
@@ -341,7 +334,7 @@ export default function SalesChart({
                             {/* Lista scrolleable */}
                             <div className="max-h-60 overflow-y-auto py-1">
                                 {allProducts.map((product, idx) => {
-                                    const color = getColor(idx);
+                                    const color = getChartColor(idx);
                                     const active = selectedProducts.has(product);
                                     return (
                                         <button
@@ -352,7 +345,7 @@ export default function SalesChart({
                                             {/* Swatch de color */}
                                             <span
                                                 className="flex-shrink-0 w-2.5 h-2.5 rounded-sm transition-colors"
-                                                style={{ backgroundColor: active ? color : "#d1d5db" }}
+                                                style={{ backgroundColor: active ? color : SWATCH_INACTIVE_COLOR }}
                                             />
                                             <span
                                                 className={`flex-1 truncate text-sm transition-colors ${active ? "text-gray-800 font-medium" : "text-gray-400"
@@ -423,7 +416,7 @@ export default function SalesChart({
                 {allProducts
                     .filter((p) => selectedProducts.has(p))
                     .map((product) => {
-                        const color = getColor(allProducts.indexOf(product));
+                        const color = getChartColor(allProducts.indexOf(product));
                         return simplified ? (
                             <span
                                 key={product}

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Box, Flex, Heading, Span, Table, Text } from "@chakra-ui/react";
 import type { Column, SaleRow } from "@/types/SalesTypes";
 
 type SortDirection = "asc" | "desc";
@@ -43,96 +44,170 @@ export default function SalesTable({ rows, cols, title = "Reporte de Ventas", so
 
   const totalquantitys = rows.reduce((sum, row) => sum + row.quantity, 0);
   return (
-    <div
-      style={{ fontFamily: "'DM Sans', 'Segoe UI', sans-serif" }}
+    <Box
       className="w-full max-w-3xl mx-auto"
+      fontFamily="'DM Sans', 'Segoe UI', sans-serif"
     >
       {/* Header */}
-      <div className="flex items-center justify-between mb-4 px-1">
-        <div>
-          <h2 className="text-xl font-bold text-gray-800 tracking-tight">{title}</h2>
-          <p className="text-xs text-gray-400 mt-0.5">
+      <Flex align="center" justify="space-between" mb={4} px={1}>
+        <Box>
+          <Heading
+            as="h2"
+            fontSize="xl"
+            fontWeight="bold"
+            color="gray.800"
+            letterSpacing="tight"
+          >
+            {title}
+          </Heading>
+          <Text fontSize="xs" color="gray.400" mt="0.5">
             {rows.length} productos · Semana {rows[0]?.week}
-          </p>
-        </div>
-        <div className="text-right">
-          <p className="text-xs text-gray-400 uppercase tracking-widest">Total Ventas</p>
-          <p className="text-2xl font-black text-gray-900">
+          </Text>
+        </Box>
+        <Box textAlign="right">
+          <Text
+            fontSize="xs"
+            color="gray.400"
+            textTransform="uppercase"
+            letterSpacing="widest"
+          >
+            Total Ventas
+          </Text>
+          <Text fontSize="2xl" fontWeight="black" color="gray.900">
             {totalquantitys.toLocaleString("es-CO")}
-          </p>
-        </div>
-      </div>
+          </Text>
+        </Box>
+      </Flex>
 
       {/* Table */}
-      <div className="rounded-2xl overflow-hidden shadow-lg border border-gray-100">
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="bg-gray-800">
+      <Box
+        borderRadius="2xl"
+        overflow="hidden"
+        boxShadow="lg"
+        borderWidth="1px"
+        borderColor="gray.100"
+      >
+        <Table.Root width="100%">
+          <Table.Header>
+            <Table.Row bg="gray.800">
               {columns.map((col) => (
-                <th
+                <Table.ColumnHeader
                   key={col.key}
                   onClick={() => handleSort(col.key)}
-                  className="px-4 py-3.5 text-center text-xs font-semibold text-white uppercase tracking-wider cursor-pointer select-none transition-colors hover:bg-gray-700 first:rounded-tl-2xl last:rounded-tr-2xl"
+                  px={4}
+                  py="3.5"
+                  textAlign="center"
+                  fontSize="xs"
+                  fontWeight="semibold"
+                  color="white"
+                  textTransform="uppercase"
+                  letterSpacing="wider"
+                  cursor="pointer"
+                  userSelect="none"
+                  transition="background-color 150ms"
+                  _hover={{ bg: "gray.700" }}
                 >
-                  <span className="flex items-center justify-center gap-1">
+                  <Flex align="center" justify="center" gap={1}>
                     {col.label}
                     {sortKey === col.key ? (
-                      <span className="text-amber-400 text-xs">
+                      <Span color="yellow.400" fontSize="xs">
                         {sortDir === "asc" ? "↑" : "↓"}
-                      </span>
+                      </Span>
                     ) : (
-                      <span className="text-gray-500 text-xs opacity-60">↕</span>
+                      <Span color="gray.500" fontSize="xs" opacity={0.6}>↕</Span>
                     )}
-                  </span>
-                </th>
+                  </Flex>
+                </Table.ColumnHeader>
               ))}
-            </tr>
-          </thead>
-          <tbody>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
             {sorted.map((row, i) => {
               const isLast = i === sorted.length - 1;
               const isEven = i % 2 === 0;
+              const rowBg = row.isPrediction ? "cyan.300" : isEven ? "white" : "gray.50";
+              const rowHoverBg = row.isPrediction ? "cyan.100" : "yellow.50";
               return (
-                <tr
+                <Table.Row
                   key={`${row.identificator}-${row.week}`}
-                  className={`
-                    transition-colors duration-150
-                    ${row.isPrediction ? "bg-cyan-300" : isEven ? "bg-white" : "bg-gray-50"}
-                    ${row.isPrediction ? "hover:bg-cyan-100" : "hover:bg-amber-50"}
-                    ${isLast ? "last:rounded-b-2xl" : "border-b border-gray-100"}
-                  `}
+                  bg={rowBg}
+                  _hover={{ bg: rowHoverBg }}
+                  transition="background-color 150ms"
+                  borderBottomWidth={isLast ? "0" : "1px"}
+                  borderBottomColor="gray.100"
                 >
-                  <td className="px-4 py-4 text-center text-sm font-semibold text-gray-800 leading-tight">
+                  <Table.Cell
+                    px={4}
+                    py={4}
+                    textAlign="center"
+                    fontSize="sm"
+                    fontWeight="semibold"
+                    color="gray.800"
+                    lineHeight="tight"
+                  >
                     {row.productName}
-                  </td>
-                  <td className="px-4 py-4 text-center">
-                    <span className="inline-block bg-gray-800 text-white text-xs font-mono font-bold px-2.5 py-1 rounded-full tracking-widest">
+                  </Table.Cell>
+                  <Table.Cell px={4} py={4} textAlign="center">
+                    <Span
+                      display="inline-block"
+                      bg="gray.800"
+                      color="white"
+                      fontSize="xs"
+                      fontFamily="mono"
+                      fontWeight="bold"
+                      px="2.5"
+                      py={1}
+                      borderRadius="full"
+                      letterSpacing="widest"
+                    >
                       {row.identificator}
-                    </span>
-                  </td>
-                  <td className="px-4 py-4 text-center text-sm font-bold text-gray-900">
+                    </Span>
+                  </Table.Cell>
+                  <Table.Cell
+                    px={4}
+                    py={4}
+                    textAlign="center"
+                    fontSize="sm"
+                    fontWeight="bold"
+                    color="gray.900"
+                  >
                     {row.quantity.toLocaleString("es-CO")}
-                  </td>
-                  <td className="px-4 py-4 text-center">
-                    <span className="inline-block bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-1 rounded-full">
+                  </Table.Cell>
+                  <Table.Cell px={4} py={4} textAlign="center">
+                    <Span
+                      display="inline-block"
+                      bg="yellow.100"
+                      color="yellow.800"
+                      fontSize="xs"
+                      fontWeight="bold"
+                      px="2.5"
+                      py={1}
+                      borderRadius="full"
+                    >
                       {row.week}
-                    </span>
-                  </td>
-                  <td className="px-4 py-4 text-center text-sm text-gray-500 font-mono">
+                    </Span>
+                  </Table.Cell>
+                  <Table.Cell
+                    px={4}
+                    py={4}
+                    textAlign="center"
+                    fontSize="sm"
+                    color="gray.500"
+                    fontFamily="mono"
+                  >
                     {row.date.split("T")[0]}
-                    {/* si las fechas se rompen es culpa de esta linea jaja */}
-                  </td>
-                </tr>
+                  </Table.Cell>
+                </Table.Row>
               );
             })}
-          </tbody>
-        </table>
-      </div>
+          </Table.Body>
+        </Table.Root>
+      </Box>
 
       {/* Footer note */}
-      <p className="text-xs text-gray-400 mt-3 px-1 text-right">
+      <Text fontSize="xs" color="gray.400" mt={3} px={1} textAlign="right">
         Haz clic en una columna para ordenar
-      </p>
-    </div>
+      </Text>
+    </Box>
   );
 }
