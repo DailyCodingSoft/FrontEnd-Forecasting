@@ -6,20 +6,22 @@ type SortDirection = "asc" | "desc";
 
 interface SalesTableProps {
   rows: SaleRow[];
-  cols: (keyof SaleRow)[];
   title?: string;
   sort_key?: keyof SaleRow | null;
   sort_dir?: SortDirection;
 }
 
-export default function SalesTable({ rows, cols, title = "Reporte de Ventas", sort_key = null, sort_dir = "asc" }: SalesTableProps) {
+const columns: Column[] = [
+  { key: "productName", label: "productName" },
+  { key: "identificator", label: "identificator" },
+  { key: "quantity", label: "quantity" },
+  { key: "week", label: "week" },
+  { key: "date", label: "date" },
+];
+
+export default function SalesTable({ rows, title = "Reporte de Ventas", sort_key = null, sort_dir = "asc" }: SalesTableProps) {
   const [sortKey, setSortKey] = useState<keyof SaleRow | null>(sort_key);
   const [sortDir, setSortDir] = useState<SortDirection>(sort_dir);
-
-  const columns: Column[] = cols.map(c => ({
-      key: c,
-      label: c
-  }));
 
   const handleSort = (key: keyof SaleRow): void => {
     if (sortKey === key) {

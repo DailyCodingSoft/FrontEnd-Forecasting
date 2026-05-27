@@ -36,7 +36,7 @@ export default function VisualizeData() {
         const [from, to] = getDateRange(data);
         try {
             const response = await getSalesTableDataByFilters(from, to, product ? product[0] : null);
-            setTable({ columns: response.columns, rows: response.rows});
+            setTable({ rows: response.rows });
         }catch (error: unknown) {
             if (error instanceof Error) {
                 setError(error.message)
@@ -53,7 +53,7 @@ export default function VisualizeData() {
         return (<>
         <DateAndProductFilter onSubmit={sendFilters} ></DateAndProductFilter>
         <SalesGraph rows={table.rows} ></SalesGraph>
-        <SalesTable rows={table.rows} cols={table.columns} ></SalesTable>
+        <SalesTable rows={table.rows} ></SalesTable>
     </>)   
     }else {
         return <div>Error obteniendo la informacion del servidor: {error}</div>

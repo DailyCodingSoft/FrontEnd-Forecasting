@@ -13,7 +13,7 @@ export default function Predictions() {
     async function fetchTable(identificator: string, prediction: SaleRow) {
         const response = await getSalesTableDataByFilters(null, null, identificator);
         const predict_table = response.rows.concat(prediction)
-        setTable({rows: predict_table, columns: response.columns});
+        setTable({rows: predict_table});
     }
 
     async function fetchData(product: [string,string]) {
@@ -45,6 +45,6 @@ export default function Predictions() {
         <h1>Predictions</h1>
         <PredictionInput onSubmit={fetchData}/>
         <SalesGraph rows={table.rows} ></SalesGraph>
-        <SalesTable rows={table.rows} cols={table.columns} sort_key={table.columns.find((c) => c == 'week')}  sort_dir={"desc"} ></SalesTable>
+        <SalesTable rows={table.rows} sort_key="week" sort_dir={"desc"} ></SalesTable>
     </>)
 }
