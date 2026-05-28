@@ -55,6 +55,7 @@ export default function DateFilter(props: { onSubmit: (data: dateFilterData) => 
 
     function onChangeMonth(value: string) {
         setMonth(value)
+        setDay("")
         if (year)
             setAvailableDays(Array.from({ length: getDaysInMonth(new Date(parseInt(year), parseInt(value))) }, (_, i) => 1 + i))
         sendData(year, value, day, week)
@@ -117,6 +118,7 @@ export default function DateFilter(props: { onSubmit: (data: dateFilterData) => 
                     <PillSelect
                         name="daySelector"
                         value={day}
+                        disabled={!month}
                         onChange={e => {
                             setDay(e.target.value)
                             sendData(year, month, e.target.value, week)

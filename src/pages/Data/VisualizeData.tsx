@@ -46,12 +46,17 @@ export default function VisualizeData() {
     };
 
     const sendFilters = async (data: dateFilterData, product: [string, string] | null) => {
+        console.log("data:", data);
+        console.log("product:", product);
+
         if (!data.year && !data.month && !data.day && !data.week && !product) {
             await handleClear();
             return;
         }
 
         const [from, to] = getDateRange(data);
+        console.log("from:", from, "to:", to);
+
         try {
             const response = await getSalesTableDataByFilters(
                 from,
@@ -60,6 +65,7 @@ export default function VisualizeData() {
                 data.week || null,
                 data.year || null
             );
+            console.log("response:", response);
             setTable({ rows: response.rows });
         } catch (error: unknown) {
             if (error instanceof Error) {
