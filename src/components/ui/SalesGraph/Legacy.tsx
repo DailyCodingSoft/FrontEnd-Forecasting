@@ -3,11 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import { useChartTokens } from "@/theme/useChartTokens";
 import type { SalesChartProps } from "./types";
-import { WEEKS_BY_RANGE, TIME_RANGES } from "./constants";
 import { useProductSelection } from "./hooks/useProductSelection";
 import { useTimeRange } from "./hooks/useTimeRange";
 import { useChartData } from "./hooks/useChartData";
 import ChartCanvas from "./ChartCanvas";
+import TimeRangeBar from "./TimeRangeBar";
 
 export default function SalesChart({
     rows,
@@ -168,34 +168,14 @@ export default function SalesChart({
                 </div>}
             </div>
 
-            {/* Filtro de tiempo estilo Google Finance */}
-            {!simplified && <div className="flex items-center gap-0.5 mb-3 px-1">
-                {TIME_RANGES.map(({ label, value }) => {
-                    const weeksNeeded = WEEKS_BY_RANGE[value];
-                    const disabled =
-                        weeksNeeded !== null && allWeekNumbers.length < weeksNeeded;
-                    const active = timeRange === value;
-                    return (
-                        <button
-                            key={value}
-                            onClick={() => !disabled && setTimeRange(value)}
-                            disabled={disabled}
-                            className={`px-3 py-1 text-xs font-semibold rounded-full transition-all cursor-pointer select-none ${active
-                                ? "bg-gray-800 text-white"
-                                : disabled
-                                    ? "text-gray-300 cursor-not-allowed"
-                                    : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-                                }`}
-                        >
-                            {label}
-                        </button>
-                    );
-                })}
-                {/* Info del rango activo */}
-                <span className="ml-auto text-xs text-gray-400 tabular-nums">
-                    S{weeks[0]} – S{weeks[weeks.length - 1]}
-                </span>
-            </div>}
+            {!simplified && (
+                <TimeRangeBar
+                    range={timeRange}
+                    onChange={setTimeRange}
+                    weeks={weeks}
+                    allWeekNumbers={allWeekNumbers}
+                />
+            )}
 
             <ChartCanvas
                 xLabels={xLabels}
