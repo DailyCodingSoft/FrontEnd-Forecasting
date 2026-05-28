@@ -5,7 +5,7 @@ import { getSalesTableData, getSalesTableDataByFilters } from "@/services/sales"
 import type { SalesTableResponse } from "@/types/SalesTypes";
 import type { dateFilterData } from "@/types/filtersTypes";
 import { useEffect, useState } from "react";
-import {getDateRange} from "@/utils/files/DataFilter";
+import { getDateRange } from "@/utils/files/DataFilter";
 
 export default function VisualizeData() {
     const [table, setTable] = useState<SalesTableResponse | null>(null)
@@ -23,7 +23,7 @@ export default function VisualizeData() {
                 if (error instanceof Error) {
                     setLoading(false);
                     setError(error.message)
-                }else {
+                } else {
                     setLoading(false);
                     setError(String(error))
                 }
@@ -32,16 +32,40 @@ export default function VisualizeData() {
         fetchData();
     }, [])
 
+    const handleClear = async () => {
+        try {
+            const r = await getSalesTableData();
+            setTable(r.data);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                setError(error.message);
+            } else {
+                setError(String(error));
+            }
+        }
+    };
+
     const sendFilters = async (data: dateFilterData, product: [string, string] | null) => {
+        if (!data.year && !data.month && !data.day && !data.week && !product) {
+            await handleClear();
+            return;
+        }
+
         const [from, to] = getDateRange(data);
         try {
-            const response = await getSalesTableDataByFilters(from, to, product ? product[0] : null);
+            const response = await getSalesTableDataByFilters(
+                from,
+                to,
+                product ? product[0] : null,
+                data.week || null,
+                data.year || null
+            );
             setTable({ rows: response.rows });
-        }catch (error: unknown) {
+        } catch (error: unknown) {
             if (error instanceof Error) {
-                setError(error.message)
-            }else {
-                setError(String(error))
+                setError(error.message);
+            } else {
+                setError(String(error));
             }
         }
     };
@@ -51,11 +75,11 @@ export default function VisualizeData() {
 
     if (table) {
         return (<>
-        <DateAndProductFilter onSubmit={sendFilters} ></DateAndProductFilter>
-        <SalesGraph rows={table.rows} ></SalesGraph>
-        <SalesTable rows={table.rows} ></SalesTable>
-    </>)   
-    }else {
+            <DateAndProductFilter onSubmit={sendFilters} onClear={handleClear}></DateAndProductFilter>
+            <SalesGraph rows={table.rows} ></SalesGraph>
+            <SalesTable rows={table.rows} ></SalesTable>
+        </>)
+    } else {
         return <div>Error obteniendo la informacion del servidor: {error}</div>
     }
 }
