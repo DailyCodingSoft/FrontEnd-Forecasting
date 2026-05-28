@@ -1,4 +1,4 @@
-import type { GoalRequest, UpdateGoalRequest } from "@/types/goalTypes";
+import type { Goal, GoalRequest, UpdateGoalRequest } from "@/types/goalTypes";
 import { api } from "./api";
 
 export async function saveGoal(data: GoalRequest) {
@@ -23,6 +23,12 @@ export async function getGoalCategories(): Promise<any> {
 export async function getGoalsTableData(status: string): Promise<any> {
     const res = await api.get(`/goals/${status}`);
     return res.data;
+}
+
+export async function getAllGoals(): Promise<Goal[]> {
+    const statuses = ["active", "inactive", "completed"];
+    const results = await Promise.all(statuses.map((s) => getGoalsTableData(s)));
+    return results.flat();
 }
 
 export async function UpdateGoal(data: GoalRequest) {

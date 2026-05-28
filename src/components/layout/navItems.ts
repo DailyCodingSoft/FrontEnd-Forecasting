@@ -49,6 +49,7 @@ export const navSections: NavSection[] = [
     icon: LuTarget,
     items: [
       { to: "/goals", label: "Dashboard de metas", icon: LuLayoutDashboard },
+      { to: "/goals/history", label: "Historial de metas", icon: LuHistory },
       { to: "/create/goal", label: "Crear meta", icon: LuPlus },
     ],
   },
