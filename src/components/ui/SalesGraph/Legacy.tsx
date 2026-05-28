@@ -3,30 +3,8 @@
 import { useEffect, useRef, useMemo, useState } from "react";
 import type { SaleRow } from "@/types/SalesTypes";
 import { useChartTokens } from "@/theme/useChartTokens";
-
-interface SalesChartProps {
-    rows: SaleRow[];
-    title?: string;
-    simplified?: boolean;
-}
-
-type TimeRange = "1M" | "Q1" | "Q2" | "1Y" | "MAX";
-
-const WEEKS_BY_RANGE: Record<TimeRange, number | null> = {
-    "1M": 4,
-    Q1: 13,
-    Q2: 26,
-    "1Y": 52,
-    MAX: null,
-};
-
-const TIME_RANGES: { label: string; value: TimeRange }[] = [
-    { label: "1M", value: "1M" },
-    { label: "T1", value: "Q1" },
-    { label: "T2", value: "Q2" },
-    { label: "1A", value: "1Y" },
-    { label: "Máx", value: "MAX" },
-];
+import type { SalesChartProps, TimeRange } from "./types";
+import { WEEKS_BY_RANGE, TIME_RANGES } from "./constants";
 
 function filterByWeeks(rows: SaleRow[], range: TimeRange): SaleRow[] {
     const limit = WEEKS_BY_RANGE[range];
