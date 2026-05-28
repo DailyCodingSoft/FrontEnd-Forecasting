@@ -1,4 +1,4 @@
-import { IconButton, Tag, Icon, Stat, FormatNumber, Progress, HStack, Grid } from "@chakra-ui/react"
+import { IconButton, Tag, Icon, Stat, FormatNumber, Progress, HStack, Grid, Text } from "@chakra-ui/react"
 import { LuPencil, LuDollarSign, LuChartNoAxesCombined } from "react-icons/lu"
 import { useNavigate } from "react-router-dom"
 import type { Goal, GoalRequest } from "@/types/goalTypes"
@@ -87,6 +87,20 @@ export default function GoalCard(props: GoalCardProps) {
             <IconButton variant="outline" gridRow="1 / 3" gridColumn="6" alignSelf="center" size="sm" rounded="lg" color="gray.500">
                 <LuDollarSign />
             </IconButton>
+
+            <Text
+                gridRow="3"
+                gridColumn="4 / 7"
+                justifySelf="center"
+                fontSize="xs"
+                fontWeight="semibold"
+                color="amber.500"
+                cursor="pointer"
+                _hover={{ color: "amber.600", textDecoration: "underline" }}
+                onClick={() => navigate(`/goals/discount/${encodeURIComponent(props.goal.name)}`)}
+            >
+                Ver prediccion de precios
+            </Text>
         </Grid>
     )
 }
