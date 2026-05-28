@@ -2,15 +2,7 @@
 
 import { useEffect, useRef, useMemo, useState } from "react";
 import type { SaleRow } from "@/types/SalesTypes";
-import {
-    getChartColor,
-    PREDICTION_COLOR,
-    PREDICTION_BORDER_COLOR,
-    CHART_TOOLTIP,
-    CHART_GRID,
-    CHART_TICK_COLOR,
-    SWATCH_INACTIVE_COLOR,
-} from "@/theme/chartColors";
+import { useChartTokens } from "@/theme/useChartTokens";
 
 interface SalesChartProps {
     rows: SaleRow[];
@@ -49,6 +41,16 @@ export default function SalesChart({
     title = "Total de Ventas",
     simplified = false,
 }: SalesChartProps) {
+    const {
+        getChartColor,
+        predictionColor: PREDICTION_COLOR,
+        predictionBorderColor: PREDICTION_BORDER_COLOR,
+        tooltip: CHART_TOOLTIP,
+        grid: CHART_GRID,
+        tickColor: CHART_TICK_COLOR,
+        swatchInactiveColor: SWATCH_INACTIVE_COLOR,
+    } = useChartTokens();
+
     const canvasRef = useRef<HTMLCanvasElement>(null);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const chartRef = useRef<any>(null);
@@ -172,7 +174,15 @@ export default function SalesChart({
                     spanGaps: true,
                 };
             });
-    }, [allProducts, selectedProducts, filteredRows, weeks]);
+    }, [
+        allProducts,
+        selectedProducts,
+        filteredRows,
+        weeks,
+        getChartColor,
+        PREDICTION_COLOR,
+        PREDICTION_BORDER_COLOR,
+    ]);
 
     useEffect(() => {
         let cancelled = false;
@@ -260,7 +270,16 @@ export default function SalesChart({
                 chartRef.current = null;
             }
         };
-    }, [xLabels, datasets, weeks, tickStep]);
+    }, [
+        xLabels,
+        datasets,
+        weeks,
+        tickStep,
+        CHART_TOOLTIP,
+        CHART_GRID.x,
+        CHART_GRID.y,
+        CHART_TICK_COLOR,
+    ]);
 
     const selectedCount = selectedProducts.size;
     const totalCount = allProducts.length;
