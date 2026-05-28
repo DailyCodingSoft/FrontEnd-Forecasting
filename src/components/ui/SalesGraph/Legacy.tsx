@@ -1,18 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useMemo, useState } from "react";
-import type { SaleRow } from "@/types/SalesTypes";
+import { useEffect, useRef, useState } from "react";
 import { useChartTokens } from "@/theme/useChartTokens";
-import type { SalesChartProps, TimeRange } from "./types";
+import type { SalesChartProps } from "./types";
 import { WEEKS_BY_RANGE, TIME_RANGES } from "./constants";
-
-function filterByWeeks(rows: SaleRow[], range: TimeRange): SaleRow[] {
-    const limit = WEEKS_BY_RANGE[range];
-    if (limit === null) return rows;
-    const allWeeks = [...new Set(rows.map((r) => r.week))].sort((a, b) => b - a);
-    const latestWeeks = new Set(allWeeks.slice(0, limit));
-    return rows.filter((r) => latestWeeks.has(r.week));
-}
+import { useProductSelection } from "./hooks/useProductSelection";
+import { useTimeRange } from "./hooks/useTimeRange";
+import { useChartData } from "./hooks/useChartData";
 
 export default function SalesChart({
     rows,
@@ -34,29 +28,23 @@ export default function SalesChart({
     const chartRef = useRef<any>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    const allProducts = useMemo(
-        () => [...new Set(rows.map((r) => r.productName))].sort(),
-        [rows]
-    );
+    const allProducts = [...new Set(rows.map((r) => r.productName))].sort();
 
-    const [selectedProducts, setSelectedProducts] = useState<Set<string>>(
-        new Set(allProducts)
-    );
+    const {
+        selected: selectedProducts,
+        toggle: toggleProduct,
+        selectAll,
+        clearAll,
+    } = useProductSelection(allProducts);
 
-    useEffect(() => {
-        setSelectedProducts((prev) => {
-            const next = new Set(prev);
-            let changed = false;
-            allProducts.forEach(p => {
-                if (!next.has(p)) {
-                    next.add(p);
-                    changed = true;
-                }
-            });
-            return changed ? next : prev;
-        });
-    }, [allProducts]);
-    const [timeRange, setTimeRange] = useState<TimeRange>("MAX");
+    const {
+        range: timeRange,
+        setRange: setTimeRange,
+        filteredRows,
+        weeks,
+        allWeekNumbers,
+    } = useTimeRange(rows, simplified);
+
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     // Cerrar dropdown al hacer click afuera
@@ -70,97 +58,15 @@ export default function SalesChart({
         return () => document.removeEventListener("mousedown", handler);
     }, []);
 
-    const toggleProduct = (name: string) => {
-        setSelectedProducts((prev) => {
-            const next = new Set(prev);
-            if (next.has(name)) {
-                if (next.size === 1) return prev; // mínimo 1 activo
-                next.delete(name);
-            } else {
-                next.add(name);
-            }
-            return next;
-        });
-    };
-
-    const selectAll = () => setSelectedProducts(new Set(allProducts));
-    const clearAll = () => setSelectedProducts(new Set([allProducts[0]]));
-
-    const filteredRows = useMemo(
-        () => filterByWeeks(rows, simplified ? "MAX" : timeRange),
-        [rows, timeRange, simplified]
-    );
-
-    const weeks = useMemo(
-        () => [...new Set(filteredRows.map((r) => r.week))].sort((a, b) => a - b),
-        [filteredRows]
-    );
-
-    // Reducir densidad de ticks en el eje X según cantidad de semanas
-    const tickStep = useMemo(() => {
-        if (weeks.length <= 8) return 1;
-        if (weeks.length <= 16) return 2;
-        if (weeks.length <= 30) return 4;
-        return 8;
-    }, [weeks]);
-
-    const xLabels = useMemo(
-        () => weeks.map((w) => `${w}`),
-        [weeks]
-    );
-
-    const datasets = useMemo(() => {
-        return allProducts
-            .filter((p) => selectedProducts.has(p))
-            .map((product) => {
-                const colorIdx = allProducts.indexOf(product);
-                const color = getChartColor(colorIdx);
-                const pointBackgroundColors: string[] = [];
-                const pointBorderColors: string[] = [];
-                const pointRadii: number[] = [];
-
-                const data = weeks.map((week) => {
-                    const match = filteredRows.find(
-                        (r) => r.productName === product && r.week === week
-                    );
-
-                    if (match?.isPrediction) {
-                        pointBackgroundColors.push(PREDICTION_COLOR);
-                        pointBorderColors.push(PREDICTION_BORDER_COLOR);
-                        pointRadii.push(6);
-                    } else {
-                        pointBackgroundColors.push(color);
-                        pointBorderColors.push(color);
-                        pointRadii.push(weeks.length > 20 ? 2 : 4);
-                    }
-
-                    return match ? match.quantity : null;
-                });
-
-                return {
-                    label: product,
-                    data,
-                    borderColor: color,
-                    backgroundColor: color + "15",
-                    borderWidth: 2,
-                    pointRadius: pointRadii,
-                    pointHoverRadius: 8,
-                    pointBackgroundColor: pointBackgroundColors,
-                    pointBorderColor: pointBorderColors,
-                    tension: 0.4,
-                    fill: false,
-                    spanGaps: true,
-                };
-            });
-    }, [
-        allProducts,
-        selectedProducts,
+    const { xLabels, tickStep, datasets } = useChartData({
         filteredRows,
         weeks,
+        allProducts,
+        selectedProducts,
         getChartColor,
-        PREDICTION_COLOR,
-        PREDICTION_BORDER_COLOR,
-    ]);
+        predictionColor: PREDICTION_COLOR,
+        predictionBorderColor: PREDICTION_BORDER_COLOR,
+    });
 
     useEffect(() => {
         let cancelled = false;
@@ -261,10 +167,6 @@ export default function SalesChart({
 
     const selectedCount = selectedProducts.size;
     const totalCount = allProducts.length;
-    const allWeekNumbers = useMemo(
-        () => [...new Set(rows.map((r) => r.week))],
-        [rows]
-    );
 
     return (
         <div
