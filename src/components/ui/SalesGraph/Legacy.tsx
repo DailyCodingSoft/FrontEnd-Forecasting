@@ -7,6 +7,7 @@ import { WEEKS_BY_RANGE, TIME_RANGES } from "./constants";
 import { useProductSelection } from "./hooks/useProductSelection";
 import { useTimeRange } from "./hooks/useTimeRange";
 import { useChartData } from "./hooks/useChartData";
+import ChartCanvas from "./ChartCanvas";
 
 export default function SalesChart({
     rows,
@@ -17,15 +18,9 @@ export default function SalesChart({
         getChartColor,
         predictionColor: PREDICTION_COLOR,
         predictionBorderColor: PREDICTION_BORDER_COLOR,
-        tooltip: CHART_TOOLTIP,
-        grid: CHART_GRID,
-        tickColor: CHART_TICK_COLOR,
         swatchInactiveColor: SWATCH_INACTIVE_COLOR,
     } = useChartTokens();
 
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const chartRef = useRef<any>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     const allProducts = [...new Set(rows.map((r) => r.productName))].sort();
@@ -67,103 +62,6 @@ export default function SalesChart({
         predictionColor: PREDICTION_COLOR,
         predictionBorderColor: PREDICTION_BORDER_COLOR,
     });
-
-    useEffect(() => {
-        let cancelled = false;
-
-        const buildChart = async () => {
-            const {
-                Chart,
-                CategoryScale,
-                LinearScale,
-                PointElement,
-                LineElement,
-                LineController,
-                Tooltip,
-                Legend,
-                Filler,
-            } = await import("chart.js");
-
-            Chart.register(
-                CategoryScale, LinearScale, PointElement,
-                LineElement, LineController, Tooltip, Legend, Filler
-            );
-
-            if (cancelled || !canvasRef.current) return;
-
-            const existing = Chart.getChart(canvasRef.current);
-            if (existing) existing.destroy();
-
-            chartRef.current = new Chart(canvasRef.current, {
-                type: "line",
-                data: { labels: xLabels, datasets },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: { mode: "index", intersect: false },
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            ...CHART_TOOLTIP,
-                            borderWidth: 1,
-                            padding: 12,
-                            callbacks: {
-                                title: (items) => `Semana ${weeks[items[0].dataIndex]}`,
-                                label: (ctx) => {
-                                    const v = ctx.raw as number | null;
-                                    return v === null
-                                        ? ""
-                                        : `  ${ctx.dataset.label}: ${v.toLocaleString("es-CO")}`;
-                                },
-                            },
-                        },
-                    },
-                    scales: {
-                        x: {
-                            grid: { color: CHART_GRID.x },
-                            border: { dash: [4, 4] },
-                            ticks: {
-                                font: { size: 11 },
-                                color: CHART_TICK_COLOR,
-                                maxRotation: 0,
-                                callback: (_val, index) =>
-                                    index % tickStep === 0 ? xLabels[index] : "",
-                            },
-                        },
-                        y: {
-                            beginAtZero: true,
-                            grid: { color: CHART_GRID.y },
-                            ticks: {
-                                font: { size: 11 },
-                                color: CHART_TICK_COLOR,
-                                callback: (v) => Number(v).toLocaleString("es-CO"),
-                            },
-                        },
-                    },
-                    animation: { duration: 300 },
-                },
-            });
-        };
-
-        buildChart();
-
-        return () => {
-            cancelled = true;
-            if (chartRef.current) {
-                chartRef.current.destroy();
-                chartRef.current = null;
-            }
-        };
-    }, [
-        xLabels,
-        datasets,
-        weeks,
-        tickStep,
-        CHART_TOOLTIP,
-        CHART_GRID.x,
-        CHART_GRID.y,
-        CHART_TICK_COLOR,
-    ]);
 
     const selectedCount = selectedProducts.size;
     const totalCount = allProducts.length;
@@ -299,16 +197,12 @@ export default function SalesChart({
                 </span>
             </div>}
 
-            {/* Chart */}
-            <div className="rounded-2xl overflow-hidden shadow-sm border border-gray-100 bg-white px-4 pt-4 pb-2 mb-3">
-                <div style={{ position: "relative", height: "300px" }}>
-                    <canvas
-                        ref={canvasRef}
-                        role="img"
-                        aria-label="Gráfico de líneas de ventas por producto y semana"
-                    />
-                </div>
-            </div>
+            <ChartCanvas
+                xLabels={xLabels}
+                datasets={datasets}
+                weeks={weeks}
+                tickStep={tickStep}
+            />
 
             {/* Leyenda compacta — solo productos activos, como líneas */}
             <div className="flex flex-wrap gap-x-5 gap-y-1.5 px-1">
