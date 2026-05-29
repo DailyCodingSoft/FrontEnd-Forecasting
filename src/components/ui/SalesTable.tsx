@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Box, Flex, Heading, Span, Table, Text } from "@chakra-ui/react";
+import MetaLabel from "@/components/ui/MetaLabel";
+import SkuPill from "@/components/ui/SkuPill";
 import type { Column, SaleRow } from "@/types/SalesTypes";
 
 type SortDirection = "asc" | "desc";
@@ -46,36 +48,20 @@ export default function SalesTable({ rows, title = "Reporte de Ventas", sort_key
 
   const totalquantitys = rows.reduce((sum, row) => sum + row.quantity, 0);
   return (
-    <Box
-      className="w-full max-w-3xl mx-auto"
-      fontFamily="'DM Sans', 'Segoe UI', sans-serif"
-    >
+    <Box className="w-full max-w-3xl mx-auto">
       {/* Header */}
       <Flex align="center" justify="space-between" mb={4} px={1}>
         <Box>
-          <Heading
-            as="h2"
-            fontSize="xl"
-            fontWeight="bold"
-            color="gray.800"
-            letterSpacing="tight"
-          >
+          <Heading as="h2" textStyle="heading.section" color="text.primary">
             {title}
           </Heading>
-          <Text fontSize="xs" color="gray.400" mt="0.5">
+          <Text textStyle="body.xs" color="text.muted" mt="0.5">
             {rows.length} productos · Semana {rows[0]?.week}
           </Text>
         </Box>
         <Box textAlign="right">
-          <Text
-            fontSize="xs"
-            color="gray.400"
-            textTransform="uppercase"
-            letterSpacing="widest"
-          >
-            Total Ventas
-          </Text>
-          <Text fontSize="2xl" fontWeight="black" color="gray.900">
+          <MetaLabel color="text.muted">Total Ventas</MetaLabel>
+          <Text fontSize="2xl" fontWeight="black" color="text.primary">
             {totalquantitys.toLocaleString("es-CO")}
           </Text>
         </Box>
@@ -83,15 +69,15 @@ export default function SalesTable({ rows, title = "Reporte de Ventas", sort_key
 
       {/* Table */}
       <Box
-        borderRadius="2xl"
+        borderRadius="card"
         overflow="hidden"
         boxShadow="lg"
         borderWidth="1px"
-        borderColor="gray.100"
+        borderColor="border.subtle"
       >
         <Table.Root width="100%">
           <Table.Header>
-            <Table.Row bg="gray.800">
+            <Table.Row bg="surface.inverse">
               {columns.map((col) => (
                 <Table.ColumnHeader
                   key={col.key}
@@ -101,22 +87,22 @@ export default function SalesTable({ rows, title = "Reporte de Ventas", sort_key
                   textAlign="center"
                   fontSize="xs"
                   fontWeight="semibold"
-                  color="white"
+                  color="text.onInverse"
                   textTransform="uppercase"
                   letterSpacing="wider"
                   cursor="pointer"
                   userSelect="none"
                   transition="background-color 150ms"
-                  _hover={{ bg: "gray.700" }}
+                  _hover={{ bg: "neutral.800" }}
                 >
                   <Flex align="center" justify="center" gap={1}>
                     {col.label}
                     {sortKey === col.key ? (
-                      <Span color="yellow.400" fontSize="xs">
+                      <Span color="accent.warning.solid" fontSize="xs">
                         {sortDir === "asc" ? "↑" : "↓"}
                       </Span>
                     ) : (
-                      <Span color="gray.500" fontSize="xs" opacity={0.6}>↕</Span>
+                      <Span color="neutral.500" fontSize="xs" opacity={0.6}>↕</Span>
                     )}
                   </Flex>
                 </Table.ColumnHeader>
@@ -127,8 +113,8 @@ export default function SalesTable({ rows, title = "Reporte de Ventas", sort_key
             {sorted.map((row, i) => {
               const isLast = i === sorted.length - 1;
               const isEven = i % 2 === 0;
-              const rowBg = row.isPrediction ? "cyan.300" : isEven ? "white" : "gray.50";
-              const rowHoverBg = row.isPrediction ? "cyan.100" : "yellow.50";
+              const rowBg = row.isPrediction ? "accent.warning.bg" : isEven ? "surface.base" : "surface.muted";
+              const rowHoverBg = row.isPrediction ? "amber.100" : "surface.muted";
               return (
                 <Table.Row
                   key={`${row.identificator}-${row.week}`}
@@ -136,7 +122,7 @@ export default function SalesTable({ rows, title = "Reporte de Ventas", sort_key
                   _hover={{ bg: rowHoverBg }}
                   transition="background-color 150ms"
                   borderBottomWidth={isLast ? "0" : "1px"}
-                  borderBottomColor="gray.100"
+                  borderBottomColor="border.subtle"
                 >
                   <Table.Cell
                     px={4}
@@ -144,26 +130,13 @@ export default function SalesTable({ rows, title = "Reporte de Ventas", sort_key
                     textAlign="center"
                     fontSize="sm"
                     fontWeight="semibold"
-                    color="gray.800"
+                    color="text.primary"
                     lineHeight="tight"
                   >
                     {row.productName}
                   </Table.Cell>
                   <Table.Cell px={4} py={4} textAlign="center">
-                    <Span
-                      display="inline-block"
-                      bg="gray.800"
-                      color="white"
-                      fontSize="xs"
-                      fontFamily="mono"
-                      fontWeight="bold"
-                      px="2.5"
-                      py={1}
-                      borderRadius="full"
-                      letterSpacing="widest"
-                    >
-                      {row.identificator}
-                    </Span>
+                    <SkuPill sku={row.identificator} />
                   </Table.Cell>
                   <Table.Cell
                     px={4}
@@ -171,20 +144,20 @@ export default function SalesTable({ rows, title = "Reporte de Ventas", sort_key
                     textAlign="center"
                     fontSize="sm"
                     fontWeight="bold"
-                    color="gray.900"
+                    color="text.primary"
                   >
                     {row.quantity.toLocaleString("es-CO")}
                   </Table.Cell>
                   <Table.Cell px={4} py={4} textAlign="center">
                     <Span
                       display="inline-block"
-                      bg="yellow.100"
-                      color="yellow.800"
+                      bg="amber.100"
+                      color="amber.800"
                       fontSize="xs"
                       fontWeight="bold"
                       px="2.5"
                       py={1}
-                      borderRadius="full"
+                      borderRadius="pill"
                     >
                       {row.week}
                     </Span>
@@ -194,7 +167,7 @@ export default function SalesTable({ rows, title = "Reporte de Ventas", sort_key
                     py={4}
                     textAlign="center"
                     fontSize="sm"
-                    color="gray.500"
+                    color="text.secondary"
                     fontFamily="mono"
                   >
                     {row.date.split("T")[0]}
@@ -207,7 +180,7 @@ export default function SalesTable({ rows, title = "Reporte de Ventas", sort_key
       </Box>
 
       {/* Footer note */}
-      <Text fontSize="xs" color="gray.400" mt={3} px={1} textAlign="right">
+      <Text textStyle="body.xs" color="text.muted" mt={3} px={1} textAlign="right">
         Haz clic en una columna para ordenar
       </Text>
     </Box>

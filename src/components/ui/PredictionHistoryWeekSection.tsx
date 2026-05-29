@@ -1,5 +1,6 @@
 import { Box, Flex, Heading, Table } from "@chakra-ui/react";
 import type { WeekGroup } from "@/types/predictionHistoryTypes";
+import Card from "@/components/ui/Card";
 import CategoryTag from "@/components/ui/CategoryTag";
 import WeekStatusTag from "@/components/ui/WeekStatusTag";
 import MetaLabel from "@/components/ui/MetaLabel";
@@ -16,14 +17,14 @@ export default function PredictionHistoryWeekSection({ group }: Props) {
   const { status, predictions } = group;
 
   return (
-    <Box w="full" bg="white" borderRadius="2xl" boxShadow="md" p={6}>
+    <Card elevated w="full" p={6}>
       <Flex align="center" justify="space-between" mb={4} gap={4} wrap="wrap">
         <Flex align="center" gap={3} wrap="wrap">
           <Heading
             as="h2"
             fontSize="lg"
             fontWeight="bold"
-            color="gray.800"
+            color="text.primary"
             letterSpacing="tight"
           >
             {formatWeekShortLabel(group)}
@@ -33,10 +34,10 @@ export default function PredictionHistoryWeekSection({ group }: Props) {
         <MetaLabel>{`${predictions.length} predicciones`}</MetaLabel>
       </Flex>
 
-      <Box borderRadius="xl" overflow="hidden" borderWidth="1px" borderColor="gray.100">
+      <Box borderRadius="xl" overflow="hidden" borderWidth="1px" borderColor="border.subtle">
         <Table.Root width="100%">
           <Table.Header>
-            <Table.Row bg="gray.50">
+            <Table.Row bg="surface.muted">
               {COLUMNS.map((label) => (
                 <Table.ColumnHeader key={label} px={4} py={3} textAlign="left">
                   <MetaLabel as="span">{label}</MetaLabel>
@@ -50,22 +51,22 @@ export default function PredictionHistoryWeekSection({ group }: Props) {
               return (
                 <Table.Row
                   key={`${row.sku}-${row.generatedAt}-${i}`}
-                  bg="white"
-                  _hover={{ bg: "gray.50" }}
+                  bg="surface.base"
+                  _hover={{ bg: "surface.muted" }}
                   transition="background-color 150ms"
                   borderBottomWidth={isLast ? "0" : "1px"}
-                  borderBottomColor="gray.100"
+                  borderBottomColor="border.subtle"
                 >
-                  <Table.Cell px={4} py={4} fontSize="sm" fontWeight="semibold" color="gray.800">
+                  <Table.Cell px={4} py={4} fontSize="sm" fontWeight="semibold" color="text.primary">
                     {row.productName}
                   </Table.Cell>
                   <Table.Cell px={4} py={4}>
                     <SkuPill sku={row.sku} />
                   </Table.Cell>
-                  <Table.Cell px={4} py={4} fontSize="sm" fontWeight="bold" color="gray.900">
+                  <Table.Cell px={4} py={4} fontSize="sm" fontWeight="bold" color="text.primary">
                     {row.quantity.toLocaleString("es-CO")}
                   </Table.Cell>
-                  <Table.Cell px={4} py={4} fontSize="sm" color="gray.500" fontFamily="mono">
+                  <Table.Cell px={4} py={4} fontSize="sm" color="text.secondary" fontFamily="mono">
                     {row.generatedAt}
                   </Table.Cell>
                   <Table.Cell px={4} py={4}>
@@ -77,6 +78,6 @@ export default function PredictionHistoryWeekSection({ group }: Props) {
           </Table.Body>
         </Table.Root>
       </Box>
-    </Box>
+    </Card>
   );
 }
