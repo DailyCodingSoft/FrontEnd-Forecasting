@@ -17,7 +17,7 @@ const PillSelect = chakra("select", {
     _hover: { bg: "info.200" },
     _focus: {
       outline: "none",
-      boxShadow: "0 0 0 2px {colors.info.400}",
+      boxShadow: "focusRingInfo",
     },
   },
 });

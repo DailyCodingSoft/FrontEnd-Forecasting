@@ -7,7 +7,7 @@ type TitleProps = {
 
 const Title = ({ text }: TitleProps) => {
   return (
-    <Heading as="h1" fontSize="2xl" fontWeight="bold" mb={6}>
+    <Heading as="h1" textStyle="heading.page" mb={6}>
       {text}
     </Heading>
   );

@@ -81,7 +81,7 @@ export default function DateFilter(props: { onSubmit: (data: dateFilterData) => 
         <FilterCard title="Filtro por Fecha">
             <div className="flex flex-wrap justify-center gap-3">
                 <label className="flex items-center gap-2">
-                    <Text fontSize="sm" fontWeight="medium" color="gray.600">Año</Text>
+                    <Text fontSize="sm" fontWeight="medium" color="text.secondary">Año</Text>
                     <PillSelect
                         name="year_selector"
                         value={year}
@@ -97,7 +97,7 @@ export default function DateFilter(props: { onSubmit: (data: dateFilterData) => 
                 </label>
 
                 <label className="flex items-center gap-2">
-                    <Text fontSize="sm" fontWeight="medium" color="gray.600">Mes</Text>
+                    <Text fontSize="sm" fontWeight="medium" color="text.secondary">Mes</Text>
                     <PillSelect
                         name="monthSelector"
                         value={month}
@@ -113,7 +113,7 @@ export default function DateFilter(props: { onSubmit: (data: dateFilterData) => 
                 </label>
 
                 <label className="flex items-center gap-2">
-                    <Text fontSize="sm" fontWeight="medium" color="gray.600">Día</Text>
+                    <Text fontSize="sm" fontWeight="medium" color="text.secondary">Día</Text>
                     <PillSelect
                         name="daySelector"
                         value={day}
@@ -132,7 +132,7 @@ export default function DateFilter(props: { onSubmit: (data: dateFilterData) => 
                 </label>
 
                 <label className="flex items-center gap-2">
-                    <Text fontSize="sm" fontWeight="medium" color="gray.600">Semana</Text>
+                    <Text fontSize="sm" fontWeight="medium" color="text.secondary">Semana</Text>
                     <PillSelect
                         name="weekSelector"
                         value={week}
