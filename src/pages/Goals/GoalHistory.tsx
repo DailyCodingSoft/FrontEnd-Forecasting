@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Box, Button, Flex, Heading, Input, InputGroup, Stack, Text } from "@chakra-ui/react";
+import { Button, Flex, Heading, Input, InputGroup, Stack, Text } from "@chakra-ui/react";
 import { LuSearch } from "react-icons/lu";
 import GoalHistoryCard from "@/components/ui/GoalHistoryCard";
+import StatusCard from "@/components/ui/StatusCard";
 import { getAllGoals } from "@/services/goals";
 import type { Goal } from "@/types/goalTypes";
 
@@ -54,10 +55,10 @@ export default function GoalHistory() {
     return (
         <Flex direction="column" gap={6} p={6} maxW="5xl" mx="auto">
             <Flex direction="column" gap={1}>
-                <Heading as="h1" fontSize="2xl" fontWeight="bold">
+                <Heading as="h1" textStyle="heading.page" color="text.primary">
                     Historial de Metas
                 </Heading>
-                <Text fontSize="sm" color="gray.500">
+                <Text textStyle="body.sm" color="text.secondary">
                     Consulta de metas y su resultado — solo lectura
                 </Text>
             </Flex>
@@ -72,13 +73,13 @@ export default function GoalHistory() {
                             size="sm"
                             variant="outline"
                             borderRadius="full"
-                            borderColor="gray.200"
-                            bg={active ? "gray.900" : "transparent"}
-                            color={active ? "white" : "gray.500"}
+                            borderColor="border.default"
+                            bg={active ? "surface.inverse" : "transparent"}
+                            color={active ? "text.onInverse" : "text.secondary"}
                             textTransform="uppercase"
                             letterSpacing="wide"
                             fontSize="xs"
-                            _hover={{ bg: active ? "gray.800" : "gray.100" }}
+                            _hover={{ bg: active ? "neutral.800" : "surface.muted" }}
                         >
                             {tab.label}
                         </Button>
@@ -91,8 +92,8 @@ export default function GoalHistory() {
                     placeholder="Buscar por nombre..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    bg="white"
-                    borderColor="gray.200"
+                    bg="surface.base"
+                    borderColor="border.default"
                     borderRadius="xl"
                 />
             </InputGroup>
@@ -112,15 +113,5 @@ export default function GoalHistory() {
                     <StatusCard>No hay metas para mostrar.</StatusCard>
                 ))}
         </Flex>
-    );
-}
-
-function StatusCard({ children }: { children: React.ReactNode }) {
-    return (
-        <Box bg="white" borderRadius="2xl" boxShadow="md" p={8} textAlign="center">
-            <Text fontSize="sm" color="gray.500">
-                {children}
-            </Text>
-        </Box>
     );
 }
