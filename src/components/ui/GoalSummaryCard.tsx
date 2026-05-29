@@ -1,5 +1,4 @@
 import {
-    Box,
     Flex,
     Text,
     Progress,
@@ -8,6 +7,7 @@ import {
 } from "@chakra-ui/react";
 
 import { LuFlag } from "react-icons/lu";
+import Card from "@/components/ui/Card";
 
 type GoalSummaryCardProps = {
     goal: {
@@ -23,15 +23,15 @@ type GoalSummaryCardProps = {
 const statusConfig = {
     active: {
         label: "META ACTIVA",
-        colorScheme: "green",
+        palette: "success",
     },
     inactive: {
         label: "META INACTIVA",
-        colorScheme: "gray",
+        palette: "neutral",
     },
     completed: {
         label: "META COMPLETADA",
-        colorScheme: "blue",
+        palette: "info",
     },
 };
 
@@ -50,16 +50,7 @@ export default function GoalSummaryCard({
         ] ?? statusConfig.inactive;
 
     return (
-        <Box
-            bg="white"
-            border="1px solid"
-            borderColor="gray.200"
-            borderRadius="2xl"
-            p={5}
-            shadow="sm"
-            w="full"
-            maxW="520px"
-        >
+        <Card p={5} w="full" maxW="520px">
             <Flex justify="space-between" align="start" mb={4}>
                 <Flex
                     direction="column"
@@ -67,35 +58,26 @@ export default function GoalSummaryCard({
                     gap={1}
                 >
                     <Badge
-                        colorScheme={currentStatus.colorScheme}
+                        colorPalette={currentStatus.palette}
                         borderRadius="full"
                         px={2}
                         py={1}
-                        fontSize="10px"
+                        fontSize="2xs"
                     >
                         {currentStatus.label}
                     </Badge>
 
-                    <Text
-                        fontSize="xl"
-                        fontWeight="700"
-                        color="gray.800"
-                        lineHeight="1.2"
-                    >
+                    <Text textStyle="heading.section" color="text.primary">
                         {goal.name}
                     </Text>
 
-                    <Text
-                        fontSize="sm"
-                        color="gray.500"
-                        lineHeight="1"
-                    >
+                    <Text textStyle="body.sm" color="text.secondary">
                         {goal.category}
                     </Text>
                 </Flex>
 
                 <Flex
-                    bg="orange.50"
+                    bg="brand.50"
                     borderRadius="xl"
                     p={2.5}
                     align="center"
@@ -104,7 +86,7 @@ export default function GoalSummaryCard({
                     <Icon
                         as={LuFlag}
                         boxSize={5}
-                        color="orange.400"
+                        color="brand.400"
                     />
                 </Flex>
             </Flex>
@@ -116,16 +98,16 @@ export default function GoalSummaryCard({
             >
                 <Text
                     fontSize="sm"
-                    fontWeight="600"
-                    color="gray.700"
+                    fontWeight="semibold"
+                    color="text.primary"
                 >
                     {Math.round(percentage)}% completado
                 </Text>
 
                 <Text
                     fontSize="sm"
-                    fontWeight="600"
-                    color="gray.500"
+                    fontWeight="semibold"
+                    color="text.secondary"
                 >
                     {goal.progress.toLocaleString()} / {goal.quantity.toLocaleString()}
                 </Text>
@@ -137,16 +119,16 @@ export default function GoalSummaryCard({
                 borderRadius="full"
             >
                 <Progress.Track
-                    bg="gray.100"
+                    bg="border.subtle"
                     borderRadius="full"
                     h="2.5"
                 >
                     <Progress.Range
-                        bg="orange.400"
+                        bg="brand.400"
                         borderRadius="full"
                     />
                 </Progress.Track>
             </Progress.Root>
-        </Box>
+        </Card>
     );
 }
