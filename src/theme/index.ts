@@ -168,7 +168,7 @@ const config = defineConfig({
     textStyles: {
       heading: {
         page:    { value: { fontSize: "2xl", fontWeight: "bold", lineHeight: "tight", letterSpacing: "tight" } },
-        section: { value: { fontSize: "lg", fontWeight: "bold", lineHeight: "tight" } },
+        section: { value: { fontSize: "xl", fontWeight: "bold", lineHeight: "tight", letterSpacing: "tight" } },
       },
       metaLabel: {
         value: {

@@ -41,11 +41,11 @@ export default function ProductMenu({
                 <Button
                     size="sm"
                     variant="outline"
-                    bg="white"
-                    color="gray.700"
-                    borderColor="gray.200"
+                    bg="surface.base"
+                    color="text.secondary"
+                    borderColor="border.default"
                     fontWeight="medium"
-                    _hover={{ borderColor: "gray.300" }}
+                    _hover={{ borderColor: "border.strong" }}
                 >
                     {label}
                     <LuChevronDown />
@@ -57,17 +57,15 @@ export default function ProductMenu({
                     <Menu.Content minW="15rem" py={0}>
                         <HStack
                             justify="space-between"
-                            bg="gray.50"
+                            bg="surface.muted"
                             borderBottom="1px solid"
-                            borderColor="gray.100"
+                            borderColor="border.subtle"
                             px={3}
                             py={2}
                         >
                             <Text
-                                fontSize="xs"
-                                fontWeight="semibold"
-                                color="gray.400"
-                                textTransform="uppercase"
+                                textStyle="metaLabel"
+                                color="text.muted"
                                 letterSpacing="wider"
                             >
                                 Filtrar productos
@@ -84,11 +82,11 @@ export default function ProductMenu({
                                 >
                                     Todos
                                 </Button>
-                                <Text color="gray.300">|</Text>
+                                <Text color="border.strong">|</Text>
                                 <Button
                                     size="xs"
                                     variant="plain"
-                                    color="gray.400"
+                                    color="text.muted"
                                     fontWeight="semibold"
                                     onClick={onClearAll}
                                     px={0}
@@ -122,7 +120,7 @@ export default function ProductMenu({
                                         <Menu.ItemText
                                             flex="1"
                                             truncate
-                                            color={active ? "gray.800" : "gray.400"}
+                                            color={active ? "text.primary" : "text.muted"}
                                             fontWeight={active ? "medium" : "normal"}
                                         >
                                             {product}

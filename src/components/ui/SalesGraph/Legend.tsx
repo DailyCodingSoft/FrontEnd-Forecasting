@@ -29,7 +29,7 @@ export default function Legend({
                             key={product}
                             variant="plain"
                             size="xs"
-                            color="gray.500"
+                            color="text.secondary"
                             fontWeight="normal"
                             fontSize="xs"
                             px={0}
@@ -37,7 +37,7 @@ export default function Legend({
                             gap={1.5}
                             title="Clic para ocultar"
                             onClick={() => onToggle?.(product)}
-                            _hover={{ color: "gray.800" }}
+                            _hover={{ color: "text.primary" }}
                         >
                             {swatch}
                             {product}
@@ -48,7 +48,7 @@ export default function Legend({
                 return (
                     <HStack key={product} gap={1.5}>
                         {swatch}
-                        <Text fontSize="xs" color="gray.500">
+                        <Text textStyle="body.xs" color="text.secondary">
                             {product}
                         </Text>
                     </HStack>
