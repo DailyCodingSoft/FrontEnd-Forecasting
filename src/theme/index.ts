@@ -122,6 +122,18 @@ const config = defineConfig({
           },
         },
       },
+      radii: {
+        field: { value: "{radii.xl}" },
+        card:  { value: "{radii.2xl}" },
+        pill:  { value: "{radii.full}" },
+      },
+      shadows: {
+        card:           { value: "{shadows.sm}" },
+        cardElevated:   { value: "{shadows.md}" },
+        menu:           { value: "{shadows.lg}" },
+        focusRingBrand: { value: "0 0 0 2px {colors.brand.200}" },
+        focusRingInfo:  { value: "0 0 0 2px {colors.info.400}" },
+      },
     },
     semanticTokens: {
       colors: {
@@ -150,6 +162,70 @@ const config = defineConfig({
             fg:     { value: "{colors.amber.700}" },
             solid:  { value: "{colors.amber.400}" },
           },
+        },
+      },
+    },
+    textStyles: {
+      heading: {
+        page:    { value: { fontSize: "2xl", fontWeight: "bold", lineHeight: "tight", letterSpacing: "tight" } },
+        section: { value: { fontSize: "lg", fontWeight: "bold", lineHeight: "tight" } },
+      },
+      metaLabel: {
+        value: {
+          fontSize: "xs",
+          fontWeight: "semibold",
+          textTransform: "uppercase",
+          letterSpacing: "widest",
+          color: "text.secondary",
+        },
+      },
+      body: {
+        sm: { value: { fontSize: "sm", lineHeight: "normal" } },
+        xs: { value: { fontSize: "xs", lineHeight: "normal" } },
+      },
+      monoPill: {
+        value: {
+          fontFamily: "mono",
+          fontSize: "xs",
+          fontWeight: "bold",
+          letterSpacing: "widest",
+        },
+      },
+    },
+    layerStyles: {
+      card: {
+        value: {
+          bg: "surface.base",
+          borderWidth: "1px",
+          borderColor: "border.default",
+          borderRadius: "card",
+          boxShadow: "card",
+        },
+      },
+      cardElevated: {
+        value: {
+          bg: "surface.base",
+          borderWidth: "1px",
+          borderColor: "border.default",
+          borderRadius: "card",
+          boxShadow: "cardElevated",
+        },
+      },
+      field: {
+        value: {
+          borderWidth: "1px",
+          borderColor: "border.default",
+          borderRadius: "field",
+          bg: "surface.subtle",
+          color: "text.primary",
+          _placeholder: { color: "text.muted" },
+        },
+      },
+      pillMuted: {
+        value: {
+          bg: "surface.subtle",
+          color: "text.muted",
+          borderRadius: "pill",
         },
       },
     },
