@@ -123,6 +123,36 @@ const config = defineConfig({
         },
       },
     },
+    semanticTokens: {
+      colors: {
+        surface: {
+          base:    { value: "{colors.white}" },
+          muted:   { value: "{colors.neutral.50}" },
+          subtle:  { value: "{colors.neutral.100}" },
+          inverse: { value: "{colors.neutral.900}" },
+          overlay: { value: "{colors.blackAlpha.500}" },
+        },
+        text: {
+          primary:   { value: "{colors.neutral.900}" },
+          secondary: { value: "{colors.neutral.500}" },
+          muted:     { value: "{colors.neutral.400}" },
+          onInverse: { value: "{colors.white}" },
+        },
+        border: {
+          subtle:  { value: "{colors.neutral.100}" },
+          default: { value: "{colors.neutral.200}" },
+          strong:  { value: "{colors.neutral.300}" },
+        },
+        accent: {
+          warning: {
+            bg:     { value: "{colors.amber.50}" },
+            border: { value: "{colors.amber.200}" },
+            fg:     { value: "{colors.amber.700}" },
+            solid:  { value: "{colors.amber.400}" },
+          },
+        },
+      },
+    },
   },
 })
 
