@@ -1,7 +1,9 @@
 import { useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
-import { Box, Spinner, Flex } from "@chakra-ui/react";
+import { Box, Spinner, Flex, Text } from "@chakra-ui/react";
 import { format } from "date-fns";
+import Card from "@/components/ui/Card";
+import MetaLabel from "@/components/ui/MetaLabel";
 import GoalSummaryCard from "@/components/ui/GoalSummaryCard";
 import DiscountPredictions from "@/components/ui/DiscountPredictions";
 import ProductDiscountList, { type ProductDiscountItem } from "@/components/ui/ProductDiscountCard";
@@ -81,6 +83,21 @@ function buildSliderLog(
         prediccion: p.Prediccion,
         precioSeleccionado: prices[p.identificator] ?? p.PrecioMinimo,
     }));
+}
+
+const formatCOP = (value: number) =>
+    new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(value);
+
+function EarningsCard({ label, value, caption, accent }: { label: string; value: number; caption: string; accent: string }) {
+    return (
+        <Card flex={1} minW="180px" p={4}>
+            <MetaLabel mb={1}>{label}</MetaLabel>
+            <Text fontSize="xl" fontWeight="bold" color={accent}>
+                {formatCOP(value)}
+            </Text>
+            <Text textStyle="body.xs" color="text.muted" mt={1}>{caption}</Text>
+        </Card>
+    );
 }
 
 // ─── Página ───────────────────────────────────────────────────────────────────
@@ -240,8 +257,8 @@ export default function Discount() {
                     <Spinner />
                 </Box>
             ) : discountError ? (
-                <Box bg="red.50" border="1px solid" borderColor="red.200" borderRadius="xl" px={4} py={3}>
-                    <Box fontSize="sm" color="red.700">{discountError}</Box>
+                <Box bg="danger.50" border="1px solid" borderColor="danger.200" borderRadius="field" px={4} py={3}>
+                    <Text fontSize="sm" color="danger.700">{discountError}</Text>
                 </Box>
             ) : (
                 <>
@@ -250,33 +267,9 @@ export default function Discount() {
                     {/* Ganancias */}
                     {earnings && (
                         <Flex gap={4} wrap="wrap">
-                            <Box flex={1} minW="180px" bg="white" border="1px solid" borderColor="gray.200" borderRadius="xl" p={4}>
-                                <Box fontSize="xs" color="gray.500" fontWeight="semibold" textTransform="uppercase" letterSpacing="wide" mb={1}>
-                                    Ganancia Mínima
-                                </Box>
-                                <Box fontSize="xl" fontWeight="bold" color="orange.500">
-                                    {new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(earnings.minEarnings)}
-                                </Box>
-                                <Box fontSize="xs" color="gray.400" mt={1}>Precio mínimo por producto</Box>
-                            </Box>
-                            <Box flex={1} minW="180px" bg="white" border="1px solid" borderColor="gray.200" borderRadius="xl" p={4}>
-                                <Box fontSize="xs" color="gray.500" fontWeight="semibold" textTransform="uppercase" letterSpacing="wide" mb={1}>
-                                    Ganancia Máxima
-                                </Box>
-                                <Box fontSize="xl" fontWeight="bold" color="green.500">
-                                    {new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(earnings.maxEarnings)}
-                                </Box>
-                                <Box fontSize="xs" color="gray.400" mt={1}>Precio máximo por producto</Box>
-                            </Box>
-                            <Box flex={1} minW="180px" bg="white" border="1px solid" borderColor="gray.200" borderRadius="xl" p={4}>
-                                <Box fontSize="xs" color="gray.500" fontWeight="semibold" textTransform="uppercase" letterSpacing="wide" mb={1}>
-                                    Ganancia Seleccionada
-                                </Box>
-                                <Box fontSize="xl" fontWeight="bold" color="blue.500">
-                                    {new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(earnings.sliderEarnings)}
-                                </Box>
-                                <Box fontSize="xs" color="gray.400" mt={1}>Según precios elegidos en sliders</Box>
-                            </Box>
+                            <EarningsCard label="Ganancia Mínima" value={earnings.minEarnings} caption="Precio mínimo por producto" accent="brand.500" />
+                            <EarningsCard label="Ganancia Máxima" value={earnings.maxEarnings} caption="Precio máximo por producto" accent="success.500" />
+                            <EarningsCard label="Ganancia Seleccionada" value={earnings.sliderEarnings} caption="Según precios elegidos en sliders" accent="info.500" />
                         </Flex>
                     )}
 
