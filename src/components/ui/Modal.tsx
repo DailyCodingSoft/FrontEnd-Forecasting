@@ -15,10 +15,10 @@ const Modal = ({ open, title, description, onClose }: ModalProps) => {
   return (
     <Box
       className="fixed inset-0 flex items-center justify-center"
-      bg="blackAlpha.500"
+      bg="surface.overlay"
     >
       <Box
-        bg="white"
+        bg="surface.base"
         p={6}
         borderRadius="lg"
         boxShadow="lg"

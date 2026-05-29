@@ -134,6 +134,9 @@ const config = defineConfig({
         focusRingBrand: { value: "0 0 0 2px {colors.brand.200}" },
         focusRingInfo:  { value: "0 0 0 2px {colors.info.400}" },
       },
+      sizes: {
+        contentMax: { value: "1126px" },
+      },
     },
     semanticTokens: {
       colors: {
@@ -162,6 +165,17 @@ const config = defineConfig({
             fg:     { value: "{colors.amber.700}" },
             solid:  { value: "{colors.amber.400}" },
           },
+        },
+        sidebar: {
+          bg:           { value: "{colors.neutral.900}" },
+          itemFg:       { value: "{colors.neutral.300}" },
+          itemFgActive: { value: "{colors.brand.300}" },
+          iconMuted:    { value: "{colors.neutral.400}" },
+          sectionLabel: { value: "{colors.neutral.500}" },
+          accentBorder: { value: "{colors.brand.400}" },
+          hoverBg:      { value: "{colors.whiteAlpha.100}" },
+          activeBg:     { value: "{colors.whiteAlpha.200}" },
+          hoverFg:      { value: "{colors.white}" },
         },
       },
     },

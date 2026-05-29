@@ -7,7 +7,7 @@ export default function AppLayout() {
     <Flex h="100svh" w="full">
       <Sidebar />
       <Box as="main" flex="1" minW="0" overflowY="auto">
-        <Box maxW="1126px" mx="auto" w="full">
+        <Box maxW="contentMax" mx="auto" w="full">
           <Outlet />
         </Box>
       </Box>

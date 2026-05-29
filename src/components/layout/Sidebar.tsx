@@ -26,16 +26,16 @@ function SidebarItem({ item, active }: { item: NavItem; active: boolean }) {
       py="2.5"
       borderRadius="md"
       borderLeftWidth="2px"
-      borderLeftColor={active ? "brand.400" : "transparent"}
-      bg={active ? "whiteAlpha.200" : "transparent"}
-      color={active ? "brand.300" : "gray.300"}
+      borderLeftColor={active ? "sidebar.accentBorder" : "transparent"}
+      bg={active ? "sidebar.activeBg" : "transparent"}
+      color={active ? "sidebar.itemFgActive" : "sidebar.itemFg"}
       fontSize="sm"
       fontWeight={active ? "semibold" : "medium"}
       textDecoration="none"
-      _hover={{ bg: "whiteAlpha.100", color: "white", textDecoration: "none" }}
+      _hover={{ bg: "sidebar.hoverBg", color: "sidebar.hoverFg", textDecoration: "none" }}
     >
       <RouterLink to={item.to}>
-        <Icon as={item.icon} size="sm" color={active ? "brand.300" : "gray.400"} />
+        <Icon as={item.icon} size="sm" color={active ? "sidebar.itemFgActive" : "sidebar.iconMuted"} />
         <Text>{item.label}</Text>
       </RouterLink>
     </ChakraLink>
@@ -51,10 +51,10 @@ function RailItem({ section, active }: { section: NavSection; active: boolean })
       justifyContent="center"
       py="3"
       borderRadius="md"
-      bg={active ? "whiteAlpha.200" : "transparent"}
-      color={active ? "brand.300" : "gray.400"}
+      bg={active ? "sidebar.activeBg" : "transparent"}
+      color={active ? "sidebar.itemFgActive" : "sidebar.iconMuted"}
       textDecoration="none"
-      _hover={{ bg: "whiteAlpha.100", color: "white", textDecoration: "none" }}
+      _hover={{ bg: "sidebar.hoverBg", color: "sidebar.hoverFg", textDecoration: "none" }}
     >
       <RouterLink to={section.to} aria-label={section.label} title={section.label}>
         <Icon as={section.icon} size="md" />
@@ -81,7 +81,7 @@ export default function Sidebar() {
       w={collapsed ? "20" : "64"}
       h="100svh"
       overflowY="auto"
-      bg="gray.900"
+      bg="sidebar.bg"
       px={collapsed ? "2" : "3"}
       py="5"
       gap="8"
@@ -89,7 +89,7 @@ export default function Sidebar() {
     >
       <Flex align="center" justify={collapsed ? "center" : "space-between"} gap="2">
         {!collapsed && (
-          <Box bg="white" borderRadius="lg" p="2" flex="1" overflow="hidden">
+          <Box bg="surface.base" borderRadius="lg" p="2" flex="1" overflow="hidden">
             <Image src={clientLogo} alt="Distribuidora La Bendición FB" maxH="64px" mx="auto" />
           </Box>
         )}
@@ -99,8 +99,8 @@ export default function Sidebar() {
           onClick={() => setCollapsed((prev) => !prev)}
           variant="ghost"
           size="sm"
-          color="gray.400"
-          _hover={{ bg: "whiteAlpha.100", color: "white" }}
+          color="sidebar.iconMuted"
+          _hover={{ bg: "sidebar.hoverBg", color: "sidebar.hoverFg" }}
         >
           {collapsed ? <LuPanelLeftOpen /> : <LuPanelLeftClose />}
         </IconButton>
@@ -123,7 +123,7 @@ export default function Sidebar() {
                 fontWeight="semibold"
                 letterSpacing="wider"
                 textTransform="uppercase"
-                color="gray.500"
+                color="sidebar.sectionLabel"
               >
                 {section.label}
               </Text>
