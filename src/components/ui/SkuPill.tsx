@@ -8,15 +8,12 @@ export default function SkuPill({ sku }: SkuPillProps) {
   return (
     <Span
       display="inline-block"
-      bg="gray.800"
-      color="white"
-      fontSize="xs"
-      fontFamily="mono"
-      fontWeight="bold"
+      bg="surface.inverse"
+      color="text.onInverse"
+      textStyle="monoPill"
       px="2.5"
       py={1}
-      borderRadius="full"
-      letterSpacing="widest"
+      borderRadius="pill"
     >
       {sku}
     </Span>

@@ -1,21 +1,24 @@
 import { Tag } from "@chakra-ui/react";
 import type { ReactNode } from "react";
 
+/** Semantic palette registered in the theme (see src/theme). */
+export type PillPalette = "brand" | "success" | "danger" | "info" | "neutral";
+
 type PillTagProps = {
-  bg: string;
-  color: string;
+  colorPalette: PillPalette;
   label: string;
   leading?: ReactNode;
 };
 
-export default function PillTag({ bg, color, label, leading }: PillTagProps) {
+export default function PillTag({ colorPalette, label, leading }: PillTagProps) {
   return (
     <Tag.Root
-      bg={bg}
-      color={color}
+      colorPalette={colorPalette}
+      bg="colorPalette.100"
+      color="colorPalette.700"
       fontSize="xs"
       fontWeight="semibold"
-      borderRadius="full"
+      borderRadius="pill"
       px="2.5"
       py={1}
       borderWidth="0"
