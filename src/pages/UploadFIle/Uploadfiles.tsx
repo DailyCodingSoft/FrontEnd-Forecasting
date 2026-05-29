@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Flex } from "@chakra-ui/react";
 import Button from "@/components/ui/Button";
 import Title from "@/components/ui/Title";
 import Modal from "@/components/ui/Modal";
@@ -79,17 +80,17 @@ const UploadPage = () => {
   };
 
   return (
-    <div className="p-10 flex flex-col items-center">
+    <Flex direction="column" align="center" p={10}>
       <Title text="CARGAR ARCHIVO EXCEL/CSV" />
 
       {/* 👇 aquí recibes los datos del uploader */}
       <FileUploader onDataParsed={setParsedData} resetTrigger={resetKey} onError={setHasError} />
 
-      <div className="flex flex-col md:flex-row gap-4 mt-6 w-full md:w-auto">
+      <Flex direction={{ base: "column", md: "row" }} gap={4} mt={6} w={{ base: "full", md: "auto" }}>
         {/* 👇 ESTE ES EL CAMBIO CLAVE */}
         <Button label="Cargar" variant="success" onClick={handleUpload} />
         <Button label="Cancelar" variant="danger" onClick={handleCancel} />
-      </div>
+      </Flex>
 
       <Modal
         open={open}
@@ -97,7 +98,7 @@ const UploadPage = () => {
         description="Se completó correctamente"
         onClose={() => setOpen(false)}
       />
-    </div>
+    </Flex>
   );
 };
 

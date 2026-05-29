@@ -1,6 +1,7 @@
 import { getPrediction } from "@/services/predictions"
 import { getSalesTableDataByFilters } from "@/services/sales";
 import { useState } from "react"
+import { Flex, Heading, Text } from "@chakra-ui/react";
 import PredictionInput from "@/components/ui/PredictionInput"
 import type { SalesTableResponse, SaleRow } from "@/types/SalesTypes";
 import SalesTable from "@/components/ui/SalesTable";
@@ -32,19 +33,21 @@ export default function Predictions() {
 
     if (!table) {
         return (
-            <>
-                <h1>Predictions</h1>
-                <div>Selecciona un producto para ver realizar la prediccion</div>
+            <Flex direction="column" gap={6} p={6}>
+                <Heading as="h1" textStyle="heading.page" color="text.primary">Predictions</Heading>
+                <Text color="text.secondary">Selecciona un producto para ver realizar la prediccion</Text>
                 <PredictionInput onSubmit={fetchData}/>
-            </>
+            </Flex>
         )
-        
+
     }
 
-    return (<>
-        <h1>Predictions</h1>
-        <PredictionInput onSubmit={fetchData}/>
-        <SalesGraph rows={table.rows} ></SalesGraph>
-        <SalesTable rows={table.rows} sort_key="week" sort_dir={"desc"} ></SalesTable>
-    </>)
+    return (
+        <Flex direction="column" gap={6} p={6}>
+            <Heading as="h1" textStyle="heading.page" color="text.primary">Predictions</Heading>
+            <PredictionInput onSubmit={fetchData}/>
+            <SalesGraph rows={table.rows} ></SalesGraph>
+            <SalesTable rows={table.rows} sort_key="week" sort_dir={"desc"} ></SalesTable>
+        </Flex>
+    )
 }
