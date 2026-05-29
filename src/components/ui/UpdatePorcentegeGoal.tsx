@@ -119,22 +119,22 @@ export default function GoalProgressDialog(props: GoalProgressDialogProps) {
                         <Dialog.Body>
                             <VStack gap="5" align="stretch">
                                 <VStack align="stretch" gap="1">
-                                    <Text fontSize="sm" color="gray.500">Meta seleccionada</Text>
+                                    <Text fontSize="sm" color="text.secondary">Meta seleccionada</Text>
                                     <Text fontWeight="bold" fontSize="lg">{props.goal?.name}</Text>
                                 </VStack>
                                 <VStack align="stretch" gap="3">
                                     <HStack justify="space-between">
-                                        <Text fontSize="sm" color="gray.500">Progreso actual</Text>
+                                        <Text fontSize="sm" color="text.secondary">Progreso actual</Text>
                                         <Text fontWeight="bold">{props.goal?.progress?.toFixed(1)}%</Text>
                                     </HStack>
-                                    <Progress.Root value={addedProgress} colorPalette={addedProgress >= 100 ? "green" : "orange"}>
+                                    <Progress.Root value={addedProgress} colorPalette={addedProgress >= 100 ? "success" : "brand"}>
                                         <Progress.Track h="3" rounded="full">
                                             <Progress.Range rounded="full" />
                                         </Progress.Track>
                                     </Progress.Root>
                                     <HStack justify="space-between">
-                                        <Text fontSize="sm" color="gray.500">Nuevo progreso</Text>
-                                        <Text fontWeight="bold" color={addedProgress >= 100 ? "green.500" : "orange.500"}>{addedProgress.toFixed(1)}%</Text>
+                                        <Text fontSize="sm" color="text.secondary">Nuevo progreso</Text>
+                                        <Text fontWeight="bold" color={addedProgress >= 100 ? "success.500" : "brand.500"}>{addedProgress.toFixed(1)}%</Text>
                                     </HStack>
                                 </VStack>
                                 <Field.Root>
@@ -156,7 +156,7 @@ export default function GoalProgressDialog(props: GoalProgressDialogProps) {
                                 {
                                     showCompleteWarning && (
                                         <Text
-                                            color="orange.500"
+                                            color="brand.500"
                                             fontWeight="semibold"
                                             fontSize="sm"
                                         >
@@ -178,8 +178,8 @@ export default function GoalProgressDialog(props: GoalProgressDialogProps) {
                                 <Button
                                     colorPalette={
                                         addedProgress >= 100
-                                            ? "green"
-                                            : "orange"
+                                            ? "success"
+                                            : "brand"
                                     }
                                     loading={loading}
                                     onClick={handleSubmit}
@@ -242,7 +242,7 @@ export default function GoalProgressDialog(props: GoalProgressDialogProps) {
                                     </Button>
 
                                     <Button
-                                        colorPalette="green"
+                                        colorPalette="success"
                                         loading={loading}
                                         onClick={async () => {
 

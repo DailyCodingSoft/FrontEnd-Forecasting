@@ -123,7 +123,7 @@ const config = defineConfig({
         },
       },
       radii: {
-        field: { value: "{radii.xl}" },
+        field: { value: "{radii.2xl}" },
         card:  { value: "{radii.2xl}" },
         pill:  { value: "{radii.full}" },
       },
