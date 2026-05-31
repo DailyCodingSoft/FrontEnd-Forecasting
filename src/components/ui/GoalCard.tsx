@@ -1,6 +1,7 @@
-import { IconButton, Tag, Icon, Stat, FormatNumber, Progress, HStack, Grid, Text } from "@chakra-ui/react"
+import { Box, IconButton, Icon, Stat, FormatNumber, Progress, HStack, Grid, Text } from "@chakra-ui/react"
 import { LuPencil, LuDollarSign, LuChartNoAxesCombined } from "react-icons/lu"
 import { useNavigate } from "react-router-dom"
+import MutedTag from "@/components/ui/MutedTag"
 import type { Goal, GoalRequest } from "@/types/goalTypes"
 
 type GoalCardProps = {
@@ -24,59 +25,40 @@ export default function GoalCard(props: GoalCardProps) {
             rowGap="1"
             px="4"
             py="3"
-            bg="gray.50"
-            borderRadius="2xl"
+            bg="surface.muted"
+            borderRadius="card"
             border="1px solid"
-            borderColor="gray.200"
-            shadow="sm"
+            borderColor="border.default"
+            shadow="card"
             w="full"
             maxW="full"
         >
-            <Icon size="lg" gridRow="1 / 3" gridColumn="1" alignSelf="center" color="amber.400">
+            <Icon size="lg" gridRow="1 / 3" gridColumn="1" alignSelf="center" color="brand.400">
                 <LuChartNoAxesCombined />
             </Icon>
 
-            <Progress.Root colorPalette={"green"} value={props.progress} gridRow="1" gridColumn="2" width="full" minW="0">
+            <Progress.Root colorPalette="brand" value={props.progress} gridRow="1" gridColumn="2" width="full" minW="0">
                 <HStack gap="4" minW="0">
                     <Progress.Label fontWeight="semibold" fontSize="sm" truncate>{props.name}</Progress.Label>
-                    <Progress.Track flex="1" h="2" borderRadius="full" bg="gray.200">
-                        <Progress.Range borderRadius="full" bg="amber.400" />
+                    <Progress.Track flex="1" h="2" borderRadius="full" bg="border.default">
+                        <Progress.Range borderRadius="full" bg="brand.400" />
                     </Progress.Track>
-                    <Progress.ValueText fontSize="xs" color="gray.400" whiteSpace="nowrap">{`${props.progress}%`}</Progress.ValueText>
+                    <Progress.ValueText fontSize="xs" color="text.muted" whiteSpace="nowrap">{`${props.progress}%`}</Progress.ValueText>
                 </HStack>
             </Progress.Root>
 
-            <Tag.Root
-                gridRow="2"
-                gridColumn="2"
-                width="fit-content"
-                fontSize="xs"
-                textTransform="uppercase"
-                letterSpacing="wide"
-                bg="gray.100"
-                color="gray.400"
-                borderRadius="sm"
-                px="1.5"
-                py="0.5"
-                borderWidth="0"
-            >
-                <Tag.Label>{props.categorie}</Tag.Label>
-            </Tag.Root>
+            <Box gridRow="2" gridColumn="2">
+                <MutedTag label={props.categorie} />
+            </Box>
 
-            <Stat.Root gridRow="1 / 3" gridColumn="3" alignSelf="center" textAlign="right" pl="4" borderLeft="1px solid" borderColor="gray.200">
-                <Stat.Label
-                    fontSize="xs"
-                    textTransform="uppercase"
-                    letterSpacing="wide"
-                    color="gray.300"
-                    whiteSpace="nowrap"
-                >Bono acumulado</Stat.Label>
+            <Stat.Root gridRow="1 / 3" gridColumn="3" alignSelf="center" textAlign="right" pl="4" borderLeft="1px solid" borderColor="border.default">
+                <Stat.Label textStyle="metaLabel" letterSpacing="wide" color="text.muted" whiteSpace="nowrap">Bono acumulado</Stat.Label>
                 <Stat.ValueText fontSize="xl" fontWeight="bold" color="success.500" whiteSpace="nowrap">
                     <FormatNumber value={props.bonus} style="currency" currency="COP" />
                 </Stat.ValueText>
             </Stat.Root>
 
-            <IconButton variant="outline" gridRow="1 / 3" gridColumn="4" alignSelf="center" size="sm" rounded="lg" color="gray.500" onClick={props.onBonusClick}>
+            <IconButton variant="outline" gridRow="1 / 3" gridColumn="4" alignSelf="center" size="sm" rounded="lg" color="text.secondary" onClick={props.onBonusClick}>
                 <LuPencil />
             </IconButton>
 
@@ -84,7 +66,7 @@ export default function GoalCard(props: GoalCardProps) {
                 <LuPencil />
             </IconButton>
 
-            <IconButton variant="outline" gridRow="1 / 3" gridColumn="6" alignSelf="center" size="sm" rounded="lg" color="gray.500">
+            <IconButton variant="outline" gridRow="1 / 3" gridColumn="6" alignSelf="center" size="sm" rounded="lg" color="text.secondary">
                 <LuDollarSign />
             </IconButton>
 
@@ -94,9 +76,9 @@ export default function GoalCard(props: GoalCardProps) {
                 justifySelf="center"
                 fontSize="xs"
                 fontWeight="semibold"
-                color="amber.500"
+                color="brand.500"
                 cursor="pointer"
-                _hover={{ color: "amber.600", textDecoration: "underline" }}
+                _hover={{ color: "brand.600", textDecoration: "underline" }}
                 onClick={() => navigate(`/goals/discount/${encodeURIComponent(props.goal.name)}`)}
             >
                 Ver prediccion de precios

@@ -1,6 +1,8 @@
+import { Flex } from "@chakra-ui/react";
 import DateAndProductFilter from "@/components/FilterForms/DateAndProductFilter";
 import SalesGraph from "@/components/ui/SalesGraph";
 import SalesTable from "@/components/ui/SalesTable";
+import StatusCard from "@/components/ui/StatusCard";
 import { getSalesTableData, getSalesTableDataByFilters } from "@/services/sales";
 import type { SalesTableResponse } from "@/types/SalesTypes";
 import type { dateFilterData } from "@/types/filtersTypes";
@@ -76,16 +78,18 @@ export default function VisualizeData() {
         }
     };
     if (loading) {
-        return (<div>Loading...</div>)
+        return <StatusCard>Cargando…</StatusCard>
     }
 
     if (table) {
-        return (<>
-            <DateAndProductFilter onSubmit={sendFilters} onClear={handleClear}></DateAndProductFilter>
-            <SalesGraph rows={table.rows} ></SalesGraph>
-            <SalesTable rows={table.rows} ></SalesTable>
-        </>)
+        return (
+            <Flex direction="column" gap={6} p={6}>
+                <DateAndProductFilter onSubmit={sendFilters} onClear={handleClear}></DateAndProductFilter>
+                <SalesGraph rows={table.rows} ></SalesGraph>
+                <SalesTable rows={table.rows} ></SalesTable>
+            </Flex>
+        )
     } else {
-        return <div>Error obteniendo la informacion del servidor: {error}</div>
+        return <StatusCard>Error obteniendo la informacion del servidor: {error}</StatusCard>
     }
 }

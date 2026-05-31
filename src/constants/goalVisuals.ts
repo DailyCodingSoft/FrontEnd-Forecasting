@@ -11,18 +11,18 @@ const categoryVisuals: Record<string, CategoryVisual> = {
   Cheap: { icon: LuPiggyBank, palette: "teal" },
 };
 
-const fallbackCategoryVisual: CategoryVisual = { icon: LuTarget, palette: "gray" };
+const fallbackCategoryVisual: CategoryVisual = { icon: LuTarget, palette: "neutral" };
 
 export const getCategoryVisual = (category: string): CategoryVisual =>
   categoryVisuals[category] ?? fallbackCategoryVisual;
 
 export const statusVisuals: Record<string, StatusVisual> = {
   active: { label: "Activa", palette: "brand" },
-  inactive: { label: "Inactiva", palette: "gray" },
+  inactive: { label: "Inactiva", palette: "neutral" },
   completed: { label: "Completada", palette: "success" },
 };
 
-const fallbackStatusVisual: StatusVisual = { label: "Desconocido", palette: "gray" };
+const fallbackStatusVisual: StatusVisual = { label: "Desconocido", palette: "neutral" };
 
 export const getStatusVisual = (status: string): StatusVisual =>
   statusVisuals[status] ?? fallbackStatusVisual;

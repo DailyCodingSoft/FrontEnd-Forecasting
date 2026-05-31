@@ -14,9 +14,9 @@ export default function DiscountPredictions({ rows }: DiscountPredictionsProps) 
     return (
         <Box display="flex" flexDirection="column" gap={4}>
             <Box
-                bg="yellow.50"
+                bg="accent.warning.bg"
                 border="1px solid"
-                borderColor="yellow.200"
+                borderColor="accent.warning.border"
                 borderRadius="xl"
                 px={4}
                 py={3}
@@ -24,15 +24,15 @@ export default function DiscountPredictions({ rows }: DiscountPredictionsProps) 
                 alignItems="center"
                 gap={3}
             >
-                <Text fontSize="sm" color="yellow.700">
+                <Text fontSize="sm" color="accent.warning.fg">
                     Este gráfico es informativo. Los valores de predicción mostrados no se tienen en cuenta para el cálculo del descuento sugerido.
                 </Text>
             </Box>
 
             <Box
-                bg="white"
+                bg="surface.base"
                 border="1px solid"
-                borderColor="gray.100"
+                borderColor="border.subtle"
                 borderRadius="xl"
                 px={5}
                 py={4}
@@ -40,10 +40,10 @@ export default function DiscountPredictions({ rows }: DiscountPredictionsProps) 
                 alignItems="center"
                 justifyContent="space-between"
             >
-                <Text fontSize="sm" color="gray.500" fontWeight="medium">
+                <Text fontSize="sm" color="text.secondary" fontWeight="medium">
                     Total predicción
                 </Text>
-                <Text fontSize="2xl" fontWeight="bold" color="gray.800">
+                <Text fontSize="2xl" fontWeight="bold" color="text.primary">
                     {totalPredicted.toLocaleString("es-CO")}
                 </Text>
             </Box>

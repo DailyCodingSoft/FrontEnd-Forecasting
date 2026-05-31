@@ -59,7 +59,7 @@ export default function GoalForm({
 
     return (
         <Flex justify="center" px={4} py={6}>
-            <Box w="full" maxW="520px" borderRadius="3xl" bg="white" px={10} py={10} boxShadow="sm">
+            <Box w="full" maxW="520px" borderRadius="3xl" bg="surface.base" px={10} py={10} boxShadow="card">
                 <form>
                     <VStack align="stretch" gap={8}>
 
@@ -76,10 +76,10 @@ export default function GoalForm({
                             </Center>
 
                             <VStack align="start" gap={1} flex={1}>
-                                <Text fontSize="xl" fontWeight="bold" lineHeight="tight" color="gray.900">
+                                <Text textStyle="heading.section" color="text.primary">
                                     {title}
                                 </Text>
-                                <Text fontSize="xs" lineHeight="snug" color="gray.500" textAlign="left">
+                                <Text textStyle="body.xs" color="text.secondary" textAlign="left">
                                     Configura los objetivos de ventas para tu equipo
                                 </Text>
                             </VStack>
@@ -87,7 +87,7 @@ export default function GoalForm({
 
                         <Field.Root required>
                             <VStack align="stretch" gap={2} w="full">
-                                <Field.Label fontWeight="semibold" color="gray.700">
+                                <Field.Label fontWeight="semibold" color="text.secondary">
                                     Nombre de la meta 🏁
                                 </Field.Label>
                                 <Input
@@ -95,18 +95,14 @@ export default function GoalForm({
                                     onChange={(e) => setName(e.target.value)}
                                     placeholder="Nombre de la meta"
                                     h={14}
-                                    borderRadius="2xl"
-                                    borderColor="gray.200"
-                                    bg="gray.100"
-                                    color="gray.800"
-                                    _placeholder={{ color: "gray.400" }}
+                                    layerStyle="field"
                                 />
                             </VStack>
                         </Field.Root>
 
                         <Field.Root required>
                             <VStack align="stretch" gap={2} w="full">
-                                <Field.Label fontWeight="semibold" color="gray.700">
+                                <Field.Label fontWeight="semibold" color="text.secondary">
                                     Seleccion de categoria 🍺
                                 </Field.Label>
                                 <Select.Root
@@ -119,30 +115,27 @@ export default function GoalForm({
                                 >
                                     <Select.Trigger
                                         h={14}
-                                        borderRadius="2xl"
-                                        borderColor="gray.200"
-                                        bg="gray.100"
-                                        color="gray.700"
+                                        layerStyle="field"
                                         _focusVisible={{
                                             borderColor: "brand.300",
-                                            boxShadow: "0 0 0 2px var(--chakra-colors-brand-200)",
+                                            boxShadow: "focusRingBrand",
                                             outlineWidth: 0,
                                         }}
                                     >
                                         <Select.ValueText
                                             placeholder="Categoría"
-                                            color={category ? "gray.800" : "gray.400"}
+                                            color={category ? "text.primary" : "text.muted"}
                                         />
                                         <Select.Indicator />
                                     </Select.Trigger>
 
                                     <Select.Positioner>
                                         <Select.Content
-                                            borderRadius="2xl"
-                                            borderColor="gray.200"
-                                            bg="white"
+                                            borderRadius="card"
+                                            borderColor="border.default"
+                                            bg="surface.base"
                                             p={2}
-                                            boxShadow="xl"
+                                            boxShadow="menu"
                                         >
                                             {categories.map((c) => (
                                                 <Select.Item
@@ -152,7 +145,7 @@ export default function GoalForm({
                                                     borderRadius="xl"
                                                     px={3}
                                                     py={3}
-                                                    color="gray.800"
+                                                    color="text.primary"
                                                     _hover={{ bg: "brand.100" }}
                                                     _highlighted={{ bg: "brand.100" }}
                                                 >
@@ -168,7 +161,7 @@ export default function GoalForm({
 
                         <Field.Root required>
                             <VStack align="stretch" gap={2} w="full">
-                                <Field.Label fontWeight="semibold" color="gray.700">
+                                <Field.Label fontWeight="semibold" color="text.secondary">
                                     Valor del bono 💲
                                 </Field.Label>
                                 <InputGroup startElement="$" endElement="COP" w="full">
@@ -177,14 +170,10 @@ export default function GoalForm({
                                         placeholder="1.000.000"
                                         value={bonus}
                                         h={14}
-                                        borderRadius="2xl"
-                                        borderColor="gray.200"
-                                        bg="gray.100"
-                                        color="gray.800"
-                                        _placeholder={{ color: "gray.400" }}
+                                        layerStyle="field"
                                     />
                                 </InputGroup>
-                                <Field.HelperText fontSize="xs" color="gray.500">
+                                <Field.HelperText fontSize="xs" color="text.secondary">
                                     Este monto sera otorgado al cumplir el 100% de la meta.
                                 </Field.HelperText>
                             </VStack>
@@ -192,7 +181,7 @@ export default function GoalForm({
 
                         <Field.Root required>
                             <VStack align="stretch" gap={2} w="full">
-                                <Field.Label fontWeight="semibold" color="gray.700">
+                                <Field.Label fontWeight="semibold" color="text.secondary">
                                     Objetivo de venta 🎯
                                 </Field.Label>
                                 <NumberInput.Root
@@ -204,15 +193,11 @@ export default function GoalForm({
                                 >
                                     <NumberInput.Input
                                         h={14}
-                                        borderRadius="2xl"
-                                        borderColor="gray.200"
-                                        bg="gray.100"
-                                        color="gray.800"
-                                        _placeholder={{ color: "gray.400" }}
+                                        layerStyle="field"
                                     />
                                     <NumberInput.Control />
                                 </NumberInput.Root>
-                                <Field.HelperText fontSize="xs" color="gray.500">
+                                <Field.HelperText fontSize="xs" color="text.secondary">
                                     Cuantos productos se necesitan vender para cumplir la meta.
                                 </Field.HelperText>
                             </VStack>
@@ -226,7 +211,7 @@ export default function GoalForm({
                                 bg="brand.400"
                                 fontSize="md"
                                 fontWeight="semibold"
-                                color="white"
+                                color="text.onInverse"
                                 _hover={{ bg: "brand.500" }}
                             >
                                 <LuSave />
@@ -238,12 +223,12 @@ export default function GoalForm({
                                 h={14}
                                 borderRadius="2xl"
                                 border="1px solid"
-                                borderColor="gray.300"
-                                bg="white"
+                                borderColor="border.strong"
+                                bg="surface.base"
                                 fontSize="md"
                                 fontWeight="medium"
-                                color="gray.700"
-                                _hover={{ bg: "gray.50" }}
+                                color="text.secondary"
+                                _hover={{ bg: "surface.muted" }}
                             >
                                 <LuX />
                                 Cancelar

@@ -113,12 +113,8 @@ export default function ChartCanvas({
 
     return (
         <Box
-            borderRadius="2xl"
+            layerStyle="card"
             overflow="hidden"
-            boxShadow="sm"
-            border="1px solid"
-            borderColor="gray.100"
-            bg="white"
             px={4}
             pt={4}
             pb={2}

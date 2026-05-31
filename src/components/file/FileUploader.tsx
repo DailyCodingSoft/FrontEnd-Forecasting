@@ -130,7 +130,7 @@ const FileUploader = ({ onDataParsed, resetTrigger, onError }: Props) => {
         h="250px"
         borderWidth="2px"
         borderStyle="dashed"
-        borderColor={isDragging ? "info.500" : "black"}
+        borderColor={isDragging ? "info.500" : "border.strong"}
         bg={isDragging ? "info.50" : "transparent"}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
@@ -154,7 +154,7 @@ const FileUploader = ({ onDataParsed, resetTrigger, onError }: Props) => {
 
             <Text fontSize="sm" fontWeight="medium">{item.file.name}</Text>
 
-            <Box w="100%" h="3" bg="gray.200" borderRadius="sm" mt={1}>
+            <Box w="100%" h="3" bg="border.default" borderRadius="sm" mt={1}>
               <Box
                 className="transition-all"
                 h="3"

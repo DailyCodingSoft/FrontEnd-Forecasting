@@ -3,6 +3,11 @@ import { createSystem, defaultConfig, defineConfig } from "@chakra-ui/react"
 const config = defineConfig({
   theme: {
     tokens: {
+      fonts: {
+        heading: { value: "'Plus Jakarta Sans', system-ui, sans-serif" },
+        body:    { value: "'Plus Jakarta Sans', system-ui, sans-serif" },
+        mono:    { value: "'JetBrains Mono', ui-monospace, monospace" },
+      },
       colors: {
         brand: {
           50:  { value: "#fff7ed" },
@@ -56,6 +61,32 @@ const config = defineConfig({
           900: { value: "#1e3a8a" },
           950: { value: "#172554" },
         },
+        neutral: {
+          50:  { value: "#fafaf9" },
+          100: { value: "#f5f5f4" },
+          200: { value: "#e7e5e4" },
+          300: { value: "#d6d3d1" },
+          400: { value: "#a8a29e" },
+          500: { value: "#78716c" },
+          600: { value: "#57534e" },
+          700: { value: "#44403c" },
+          800: { value: "#292524" },
+          900: { value: "#1c1917" },
+          950: { value: "#0c0a09" },
+        },
+        amber: {
+          50:  { value: "#fffbeb" },
+          100: { value: "#fef3c7" },
+          200: { value: "#fde68a" },
+          300: { value: "#fcd34d" },
+          400: { value: "#fbbf24" },
+          500: { value: "#f59e0b" },
+          600: { value: "#d97706" },
+          700: { value: "#b45309" },
+          800: { value: "#92400e" },
+          900: { value: "#78350f" },
+          950: { value: "#451a03" },
+        },
         chart: {
           prediction:       { value: "#eab308" },
           predictionBorder: { value: "#ca8a04" },
@@ -89,6 +120,126 @@ const config = defineConfig({
             18: { value: "#8b5cf6" },
             19: { value: "#22c55e" },
           },
+        },
+      },
+      radii: {
+        field: { value: "{radii.2xl}" },
+        card:  { value: "{radii.2xl}" },
+        pill:  { value: "{radii.full}" },
+      },
+      shadows: {
+        card:           { value: "{shadows.sm}" },
+        cardElevated:   { value: "{shadows.md}" },
+        menu:           { value: "{shadows.lg}" },
+        focusRingBrand: { value: "0 0 0 2px {colors.brand.200}" },
+        focusRingInfo:  { value: "0 0 0 2px {colors.info.400}" },
+      },
+      sizes: {
+        contentMax: { value: "1126px" },
+      },
+    },
+    semanticTokens: {
+      colors: {
+        surface: {
+          base:    { value: "{colors.white}" },
+          muted:   { value: "{colors.neutral.50}" },
+          subtle:  { value: "{colors.neutral.100}" },
+          inverse: { value: "{colors.neutral.900}" },
+          overlay: { value: "{colors.blackAlpha.500}" },
+        },
+        text: {
+          primary:   { value: "{colors.neutral.900}" },
+          secondary: { value: "{colors.neutral.500}" },
+          muted:     { value: "{colors.neutral.400}" },
+          onInverse: { value: "{colors.white}" },
+        },
+        border: {
+          subtle:  { value: "{colors.neutral.100}" },
+          default: { value: "{colors.neutral.200}" },
+          strong:  { value: "{colors.neutral.300}" },
+        },
+        accent: {
+          warning: {
+            bg:     { value: "{colors.amber.50}" },
+            border: { value: "{colors.amber.200}" },
+            fg:     { value: "{colors.amber.700}" },
+            solid:  { value: "{colors.amber.400}" },
+          },
+        },
+        sidebar: {
+          bg:           { value: "{colors.neutral.900}" },
+          itemFg:       { value: "{colors.neutral.300}" },
+          itemFgActive: { value: "{colors.brand.300}" },
+          iconMuted:    { value: "{colors.neutral.400}" },
+          sectionLabel: { value: "{colors.neutral.500}" },
+          accentBorder: { value: "{colors.brand.400}" },
+          hoverBg:      { value: "{colors.whiteAlpha.100}" },
+          activeBg:     { value: "{colors.whiteAlpha.200}" },
+          hoverFg:      { value: "{colors.white}" },
+        },
+      },
+    },
+    textStyles: {
+      heading: {
+        page:    { value: { fontSize: "2xl", fontWeight: "bold", lineHeight: "tight", letterSpacing: "tight" } },
+        section: { value: { fontSize: "xl", fontWeight: "bold", lineHeight: "tight", letterSpacing: "tight" } },
+      },
+      metaLabel: {
+        value: {
+          fontSize: "xs",
+          fontWeight: "semibold",
+          textTransform: "uppercase",
+          letterSpacing: "widest",
+          color: "text.secondary",
+        },
+      },
+      body: {
+        sm: { value: { fontSize: "sm", lineHeight: "normal" } },
+        xs: { value: { fontSize: "xs", lineHeight: "normal" } },
+      },
+      monoPill: {
+        value: {
+          fontFamily: "mono",
+          fontSize: "xs",
+          fontWeight: "bold",
+          letterSpacing: "widest",
+        },
+      },
+    },
+    layerStyles: {
+      card: {
+        value: {
+          bg: "surface.base",
+          borderWidth: "1px",
+          borderColor: "border.default",
+          borderRadius: "card",
+          boxShadow: "card",
+        },
+      },
+      cardElevated: {
+        value: {
+          bg: "surface.base",
+          borderWidth: "1px",
+          borderColor: "border.default",
+          borderRadius: "card",
+          boxShadow: "cardElevated",
+        },
+      },
+      field: {
+        value: {
+          borderWidth: "1px",
+          borderColor: "border.default",
+          borderRadius: "field",
+          bg: "surface.subtle",
+          color: "text.primary",
+          _placeholder: { color: "text.muted" },
+        },
+      },
+      pillMuted: {
+        value: {
+          bg: "surface.subtle",
+          color: "text.muted",
+          borderRadius: "pill",
         },
       },
     },

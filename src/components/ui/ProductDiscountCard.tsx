@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Box, Flex, Text, Slider } from "@chakra-ui/react";
+import { Box, Flex, Icon, Text, Slider } from "@chakra-ui/react";
 import { LuPackage } from "react-icons/lu";
+import Card from "@/components/ui/Card";
 
 export interface ProductDiscountItem {
     identificator: string;
@@ -34,22 +35,16 @@ export function ProductDiscountCard({ item, onPriceChange }: ProductDiscountCard
     };
 
     return (
-        <Box
-            bg="white"
-            border="1px solid"
-            borderColor="gray.200"
-            borderRadius="xl"
-            p={4}
-        >
+        <Card p={4}>
             <Flex align="center" gap={3} mb={4}>
-                <Flex align="center" justify="center" bg="orange.50" borderRadius="lg" p={2}>
-                    <LuPackage size={20} color="#ED8936" />
+                <Flex align="center" justify="center" bg="brand.50" borderRadius="lg" p={2}>
+                    <Icon as={LuPackage} boxSize={5} color="brand.500" />
                 </Flex>
                 <Box>
-                    <Text fontWeight="bold" fontSize="sm" color="gray.800">
+                    <Text fontWeight="bold" fontSize="sm" color="text.primary">
                         {item.NombreProducto}
                     </Text>
-                    <Text fontSize="xs" color="gray.500">
+                    <Text fontSize="xs" color="text.secondary">
                         Predicción: <b>{item.Prediccion}</b> unidades
                     </Text>
                 </Box>
@@ -57,8 +52,8 @@ export function ProductDiscountCard({ item, onPriceChange }: ProductDiscountCard
             <Box>
                 <Flex justify="center" mb={3}>
                     <Box
-                        bg="orange.500"
-                        color="white"
+                        bg="brand.500"
+                        color="text.onInverse"
                         borderRadius="md"
                         fontSize="xs"
                         px={3}
@@ -77,26 +72,26 @@ export function ProductDiscountCard({ item, onPriceChange }: ProductDiscountCard
                     width="100%"
                 >
                     <Slider.Control>
-                        <Slider.Track bg="gray.200" h="6px" borderRadius="full">
-                            <Slider.Range bg="orange.400" />
+                        <Slider.Track bg="border.default" h="6px" borderRadius="full">
+                            <Slider.Range bg="brand.400" />
                         </Slider.Track>
                         <Slider.Thumb
                             index={0}
                             boxSize={4}
-                            bg="white"
-                            borderColor="orange.400"
+                            bg="surface.base"
+                            borderColor="brand.400"
                             borderWidth="2px"
                             borderRadius="full"
-                            boxShadow="sm"
+                            boxShadow="card"
                         />
                     </Slider.Control>
                 </Slider.Root>
                 <Flex justify="space-between" mt={2}>
-                    <Text fontSize="xs" color="gray.500">{formatCOP(item.PrecioMinimo)}</Text>
-                    <Text fontSize="xs" color="gray.500">{formatCOP(item.PrecioMaximo)}</Text>
+                    <Text fontSize="xs" color="text.secondary">{formatCOP(item.PrecioMinimo)}</Text>
+                    <Text fontSize="xs" color="text.secondary">{formatCOP(item.PrecioMaximo)}</Text>
                 </Flex>
             </Box>
-        </Box>
+        </Card>
     );
 }
 

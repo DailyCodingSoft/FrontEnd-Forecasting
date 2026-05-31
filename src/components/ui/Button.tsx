@@ -7,9 +7,9 @@ type ButtonProps = {
 };
 
 const colorPaletteMap: Record<NonNullable<ButtonProps["variant"]>, string> = {
-  primary: "blue",
-  danger: "red",
-  success: "green",
+  primary: "brand",
+  danger: "danger",
+  success: "success",
 };
 
 const Button = ({ label, onClick, variant = "primary" }: ButtonProps) => {

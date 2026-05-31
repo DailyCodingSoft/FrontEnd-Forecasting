@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { Box, Flex, Heading, Text } from "@chakra-ui/react";
+import { Flex, Heading, Text } from "@chakra-ui/react";
 import FilterCard from "@/components/ui/FilterCard";
 import PillSelect from "@/components/ui/PillSelect";
 import PredictionHistoryWeekSection from "@/components/ui/PredictionHistoryWeekSection";
 import SectionDivider from "@/components/ui/SectionDivider";
+import StatusCard from "@/components/ui/StatusCard";
 import { getPredictionHistory } from "@/services/predictions";
 import type { WeekGroup } from "@/types/predictionHistoryTypes";
 import { formatWeekShortLabel } from "@/utils/formatWeekLabel";
@@ -53,10 +54,10 @@ export default function PredictionHistory() {
   return (
     <Flex direction="column" gap={6} p={6} maxW="5xl" mx="auto">
       <Flex direction="column" gap={1}>
-        <Heading as="h1" fontSize="2xl" fontWeight="bold">
+        <Heading as="h1" textStyle="heading.page" color="text.primary">
           Historial de predicciones
         </Heading>
-        <Text fontSize="sm" color="gray.500">
+        <Text textStyle="body.sm" color="text.secondary">
           Consulta de predicciones anteriores — solo lectura
         </Text>
       </Flex>
@@ -115,15 +116,5 @@ export default function PredictionHistory() {
         </>
       )}
     </Flex>
-  );
-}
-
-function StatusCard({ children }: { children: React.ReactNode }) {
-  return (
-    <Box bg="white" borderRadius="2xl" boxShadow="md" p={8} textAlign="center">
-      <Text fontSize="sm" color="gray.500">
-        {children}
-      </Text>
-    </Box>
   );
 }

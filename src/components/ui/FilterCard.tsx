@@ -10,9 +10,7 @@ const FilterCard = ({ title, children }: FilterCardProps) => (
   <Box
     className="flex flex-col items-center gap-4 w-fit"
     p={6}
-    bg="white"
-    borderRadius="2xl"
-    boxShadow="md"
+    layerStyle="cardElevated"
   >
     <Heading
       as="h2"
@@ -20,7 +18,7 @@ const FilterCard = ({ title, children }: FilterCardProps) => (
       fontWeight="semibold"
       letterSpacing="widest"
       textTransform="uppercase"
-      color="gray.500"
+      color="text.secondary"
     >
       {title}
     </Heading>

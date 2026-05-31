@@ -44,7 +44,7 @@ export default function TimeRangeBar({
             <Spacer />
 
             {weeks.length > 0 && (
-                <Text fontSize="xs" color="gray.400" fontVariantNumeric="tabular-nums">
+                <Text textStyle="body.xs" color="text.muted" fontVariantNumeric="tabular-nums">
                     S{weeks[0]} – S{weeks[weeks.length - 1]}
                 </Text>
             )}

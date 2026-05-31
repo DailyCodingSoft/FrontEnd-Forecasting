@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { Box, Flex, Heading, Text } from "@chakra-ui/react"
 import GoalCard from "@/components/ui/GoalCard"
 import StatusSelector from "@/components/ui/StatusSelecter"
 import GoalProgressDialog from "@/components/ui/UpdatePorcentegeGoal"
@@ -60,17 +61,17 @@ export default function GoalDashboard() {
     }
 
     return (
-        <>
-            <div>
-                <h1>Resumen de Desempeño</h1>
-                <p>Revisa tu progreso hacia tus objetivos y descubre cómo puedes mejorar tu desempeño.</p>
+        <Flex direction="column" gap={6} p={6}>
+            <Flex direction="column" gap={2} align="start">
+                <Heading as="h1" textStyle="heading.page" color="text.primary">Resumen de Desempeño</Heading>
+                <Text color="text.secondary">Revisa tu progreso hacia tus objetivos y descubre cómo puedes mejorar tu desempeño.</Text>
                 <Button label="Crear Meta" onClick={() => navigate("/create/goal")} />
-            </div>
-            <div>
+            </Flex>
+            <Box>
                 <StatusSelector
                     onSelect={(status) => setSelectedStatus(status[1])}
                 />
-            </div>
+            </Box>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
                 {goals.map((goal, index) => (
                     <GoalCard
@@ -94,6 +95,6 @@ export default function GoalDashboard() {
                     await handleUpdateProgress(data)
                 }}
             />
-        </>
+        </Flex>
     )
 }
